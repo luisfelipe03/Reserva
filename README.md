@@ -15,3 +15,4 @@
 
 - [@luisfelipe03](https://www.github.com/luisfelipe03)
 - [@WalterSobralF](https://github.com/WalterSobralF)
+- [@DiogoRCSantana](https://github.com/DiogoRCSantana)
