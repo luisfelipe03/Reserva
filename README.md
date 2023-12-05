@@ -13,4 +13,5 @@
 
 ## Authors
 
-- [@luisfeliep03](https://www.github.com/luisfelipe03)
+- [@luisfelipe03](https://www.github.com/luisfelipe03)
+- [@WalterSobralF](https://github.com/WalterSobralF)
