@@ -13,6 +13,6 @@
 
 ## Authors
 
-- [@luisfelipe03](https://www.github.com/luisfelipe03)
-- [@WalterSobralF](https://github.com/WalterSobralF)
-- [@DiogoRCSantana](https://github.com/DiogoRCSantana)
+- [Luis Felipe](https://www.github.com/luisfelipe03)
+- [Walter Sobral](https://github.com/WalterSobralF)
+- [Diogo Ramos](https://github.com/DiogoRCSantana)
