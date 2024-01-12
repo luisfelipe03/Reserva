@@ -1,10 +1,10 @@
 spring:
-  datasource:
+ datasource:
     url: jdbc:postgresql://localhost:5432/reserva
     username: postgres
     password: Info@1234
     driver-class-name: org.postgresql.Driver
-  jpa:
+ jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
