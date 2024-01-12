@@ -21,7 +21,7 @@ public class AlunoService {
 	AlunoRepository repository;
 
 	public List<AlunoVO> findAll() {
-		logger.info("Listando todos os alunos cadastrados no bd");
+		logger.info("Listando todos os alunos cadastrados");
 		return ModelMapper.parseListObjects(repository.findAll(), AlunoVO.class);
 	}
 
@@ -30,7 +30,7 @@ public class AlunoService {
 		logger.info("Listando um aluno pelo id");
 
 		var entity = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe aluno cadastrado com id: " + id));
 		return ModelMapper.parseObject(entity, AlunoVO.class);
 	}
 
@@ -43,7 +43,7 @@ public class AlunoService {
 
 	public AlunoVO update(AlunoVO aluno) {
 
-		logger.info("Updating one person!");
+		logger.info("Atualizando cadastro de aluno");
 
 		var entity = repository.findById(aluno.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe aluno cadastrado com id:" + aluno.getId()));
@@ -60,10 +60,10 @@ public class AlunoService {
 
 	public void delete(Long id) {
 
-		logger.info("Deleting one person!");
+		logger.info("Deletando aluno pelo id");
 
 		var entity = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe aluno cadastrado com id: " + id));
 		repository.delete(entity);
 	}
 }
