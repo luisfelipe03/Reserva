@@ -1,7 +1,5 @@
 package br.com.reserva.models;
 
-import java.util.Objects;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +13,6 @@ public class Turma {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String disciplina;
-	private long professorId;
 	@ManyToOne
 	private Curso curso;
 
@@ -46,36 +43,6 @@ public class Turma {
 		this.curso = curso;
 	}
 
-	public long getProfessorId() {
-		return professorId;
-	}
-
-	public void setProfessorId(long professorId) {
-		this.professorId = professorId;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(curso, disciplina, id, professorId);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Turma other = (Turma) obj;
-		return Objects.equals(curso, other.curso) && Objects.equals(disciplina, other.disciplina) && id == other.id
-				&& professorId == other.professorId;
-	}
-
-	@Override
-	public String toString() {
-		return "Turma [id=" + id + ", disciplina=" + disciplina + ", professorId=" + professorId + ", curso=" + curso
-				+ "]";
-	}
+	
 
 }

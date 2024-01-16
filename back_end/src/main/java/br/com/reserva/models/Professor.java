@@ -30,7 +30,7 @@ public class Professor {
 	private Cargos cargo;
 	@ManyToOne
 	private Curso curso;
-	@OneToMany(mappedBy = "professorId")
+	@OneToMany
 	@Column(nullable = true)
 	private List<Turma> turmas;
 

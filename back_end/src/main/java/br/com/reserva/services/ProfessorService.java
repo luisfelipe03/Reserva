@@ -57,6 +57,15 @@ public class ProfessorService {
 		var vo = ModelMapper.parseObject(repository.save(entity), ProfessorVO.class);
 		return vo;
 	}
+	
+	public ProfessorVO updateTurma(ProfessorVO professor) {
+		var entity = repository.findById(professor.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe professor cadastrado com id:" + professor.getId()));
+
+		entity.setTurmas(professor.getTurmas());
+		var vo = ModelMapper.parseObject(repository.save(entity), ProfessorVO.class);
+		return vo;
+	}
 
 	public void delete(Long id) {
 
@@ -66,4 +75,5 @@ public class ProfessorService {
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe professor cadastrado com id: " + id));
 		repository.delete(entity);
 	}
+
 }
