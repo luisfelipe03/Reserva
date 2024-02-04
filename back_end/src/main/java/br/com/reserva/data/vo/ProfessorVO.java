@@ -13,6 +13,7 @@ public class ProfessorVO {
 	private String nome;
 	private String cpf;
 	private String email;
+	private String senha;
 	private Cargos cargo = Cargos.PROFESSOR;
 	private Curso curso;
 	private List<Turma> turmas;
@@ -75,10 +76,22 @@ public class ProfessorVO {
 	public void setTurmas(List<Turma> turmas) {
 		this.turmas = turmas;
 	}
+	
+	public void addTurma(Turma turma) {
+		this.turmas.add(turma);
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cargo, cpf, curso, email, id, nome, turmas);
+		return Objects.hash(cargo, cpf, curso, email, id, nome, senha, turmas);
 	}
 
 	@Override
@@ -92,14 +105,16 @@ public class ProfessorVO {
 		ProfessorVO other = (ProfessorVO) obj;
 		return cargo == other.cargo && Objects.equals(cpf, other.cpf) && Objects.equals(curso, other.curso)
 				&& Objects.equals(email, other.email) && id == other.id && Objects.equals(nome, other.nome)
-				&& Objects.equals(turmas, other.turmas);
+				&& Objects.equals(senha, other.senha) && Objects.equals(turmas, other.turmas);
 	}
 
 	@Override
 	public String toString() {
-		return "ProfessorVO [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", cargo=" + cargo
-				+ ", curso=" + curso + ", turmas=" + turmas + "]";
+		return "ProfessorVO [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha
+				+ ", cargo=" + cargo + ", curso=" + curso + ", turmas=" + turmas + "]";
 	}
+
+	
 	
 	
 }

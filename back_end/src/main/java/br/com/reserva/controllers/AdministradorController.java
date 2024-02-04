@@ -14,46 +14,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.reserva.data.vo.AlunoVO;
+import br.com.reserva.data.vo.AdministradorVO;
 import br.com.reserva.facade.Facade;
 
-
 @RestController
-@RequestMapping("api/aluno")
-public class AlunoController {
+@RequestMapping("api/adm")
+public class AdministradorController {
 	
 	@Autowired
 	Facade facade;
 	
-	
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<AlunoVO> getTodosAlunos() {
-		return facade.getAllAlunos();
+	public List<AdministradorVO> getTodosAdm() {
+		return facade.getAllAdm();
 	}
 	
-
 	@GetMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public AlunoVO getAluno(@PathVariable(value = "id") Long id) {
-		return facade.getByIdAluno(id);
+	public AdministradorVO getTodosAdm(@PathVariable(value = "id") Long id) {
+		return facade.getByIdAdm(id);
 	}
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public AlunoVO create(@RequestBody AlunoVO aluno) {
-		return facade.saveAluno(aluno);
+	public AdministradorVO create(@RequestBody AdministradorVO administradorVO) {
+		return facade.createAdm(administradorVO);
 	}
 	
-	@PutMapping()
+	@PutMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	public AlunoVO update(@RequestBody AlunoVO aluno) {
-		return facade.updateAluno(aluno);
+	public AdministradorVO update(@RequestBody AdministradorVO administradorVO) {
+		return facade.updateAdm(administradorVO);
 	}
 	
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(value = "id") Long id) {
-		facade.deleteAluno(id);
+		facade.deleteAdm(id);
 	}
+
 }

@@ -1,6 +1,5 @@
 package br.com.reserva.models;
 
-import java.util.List;
 import java.util.Objects;
 
 import br.com.reserva.utils.Cargos;
@@ -11,12 +10,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
-public class Professor {
-
+public class Administrador {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -30,13 +27,8 @@ public class Professor {
 	private String senha;
 	@Enumerated(EnumType.STRING)
 	private Cargos cargo;
-	@ManyToOne
-	private Curso curso;
-	@OneToMany
-	private List<Turma> turmas;
-
-	public Professor() {
-	}
+	
+	public Administrador() {}
 
 	public long getId() {
 		return id;
@@ -70,31 +62,6 @@ public class Professor {
 		this.email = email;
 	}
 
-	public Cargos getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(Cargos cargo) {
-		this.cargo = cargo;
-	}
-
-	public Curso getCurso() {
-		return curso;
-	}
-
-	public void setCurso(Curso curso) {
-		this.curso = curso;
-	}
-
-	public List<Turma> getTurmas() {
-		return turmas;
-	}
-
-
-	public void setTurmas(List<Turma> turmas) {
-		this.turmas = turmas;
-	}
-
 	public String getSenha() {
 		return senha;
 	}
@@ -103,9 +70,17 @@ public class Professor {
 		this.senha = senha;
 	}
 
+	public Cargos getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(Cargos cargo) {
+		this.cargo = cargo;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(cargo, cpf, curso, email, id, nome, senha, turmas);
+		return Objects.hash(cargo, cpf, email, id, nome, senha);
 	}
 
 	@Override
@@ -116,18 +91,17 @@ public class Professor {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Professor other = (Professor) obj;
-		return cargo == other.cargo && Objects.equals(cpf, other.cpf) && Objects.equals(curso, other.curso)
-				&& Objects.equals(email, other.email) && id == other.id && Objects.equals(nome, other.nome)
-				&& Objects.equals(senha, other.senha) && Objects.equals(turmas, other.turmas);
+		Administrador other = (Administrador) obj;
+		return cargo == other.cargo && Objects.equals(cpf, other.cpf) && Objects.equals(email, other.email)
+				&& id == other.id && Objects.equals(nome, other.nome) && Objects.equals(senha, other.senha);
 	}
 
 	@Override
 	public String toString() {
-		return "Professor [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha
-				+ ", cargo=" + cargo + ", curso=" + curso + ", turmas=" + turmas + "]";
+		return "Administrador [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha
+				+ ", cargo=" + cargo + "]";
 	}
-
+	
 	
 
 }

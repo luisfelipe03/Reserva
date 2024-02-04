@@ -3,6 +3,7 @@ package br.com.reserva.models;
 import java.util.Objects;
 
 import br.com.reserva.utils.Cargos;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,11 +18,17 @@ public class Aluno {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(nullable = false)
 	private String nome;
+	@Column(nullable = false)
 	private String cpf;
+	@Column(nullable = false)
 	private String email;
+	@Column(nullable = false)
+	private String senha;
 	@Enumerated(EnumType.STRING)
 	private Cargos cargo;
+	@Column(nullable = false)
 	private int periodo;
 	@ManyToOne
 	private Curso curso;
@@ -84,9 +91,17 @@ public class Aluno {
 		this.curso = curso;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(cargo, cpf, curso, email, id, nome, periodo);
+		return Objects.hash(cargo, cpf, curso, email, id, nome, periodo, senha);
 	}
 
 	@Override
@@ -100,13 +115,15 @@ public class Aluno {
 		Aluno other = (Aluno) obj;
 		return cargo == other.cargo && Objects.equals(cpf, other.cpf) && Objects.equals(curso, other.curso)
 				&& Objects.equals(email, other.email) && id == other.id && Objects.equals(nome, other.nome)
-				&& periodo == other.periodo;
+				&& periodo == other.periodo && Objects.equals(senha, other.senha);
 	}
 
 	@Override
 	public String toString() {
-		return "Aluno [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", cargo=" + cargo
-				+ ", periodo=" + periodo + ", curso=" + curso + "]";
+		return "Aluno [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha
+				+ ", cargo=" + cargo + ", periodo=" + periodo + ", curso=" + curso + "]";
 	}
+
+	
 
 }

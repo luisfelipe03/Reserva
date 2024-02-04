@@ -1,5 +1,7 @@
 package br.com.reserva.models;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,6 +44,29 @@ public class Turma {
 	public void setCurso(Curso curso) {
 		this.curso = curso;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(curso, disciplina, id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Turma other = (Turma) obj;
+		return Objects.equals(curso, other.curso) && Objects.equals(disciplina, other.disciplina) && id == other.id;
+	}
+
+	@Override
+	public String toString() {
+		return "Turma [id=" + id + ", disciplina=" + disciplina + ", curso=" + curso + "]";
+	}
+	
 
 	
 

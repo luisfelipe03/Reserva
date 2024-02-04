@@ -12,6 +12,7 @@ public class AlunoVO {
 	private String cpf;
 	private Cargos cargo = Cargos.ALUNO;
 	private String email;
+	private String senha;
 	private int periodo;
 	private Curso curso;
 
@@ -74,9 +75,17 @@ public class AlunoVO {
 		this.cargo = cargo;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(cargo, cpf, curso, email, id, nome, periodo);
+		return Objects.hash(cargo, cpf, curso, email, id, nome, periodo, senha);
 	}
 
 	@Override
@@ -90,13 +99,15 @@ public class AlunoVO {
 		AlunoVO other = (AlunoVO) obj;
 		return cargo == other.cargo && Objects.equals(cpf, other.cpf) && Objects.equals(curso, other.curso)
 				&& Objects.equals(email, other.email) && id == other.id && Objects.equals(nome, other.nome)
-				&& periodo == other.periodo;
+				&& periodo == other.periodo && Objects.equals(senha, other.senha);
 	}
 
 	@Override
 	public String toString() {
 		return "AlunoVO [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", cargo=" + cargo + ", email=" + email
-				+ ", periodo=" + periodo + ", curso=" + curso + "]";
+				+ ", senha=" + senha + ", periodo=" + periodo + ", curso=" + curso + "]";
 	}
+
+	
 
 }
