@@ -14,7 +14,6 @@ public class AuthService {
 	UsuarioRepository repository;
 
 	public Usuario autenticar(String email, String senha) {
-		System.out.println("email: " + email + "\nsenha: " + senha);
 		for (Usuario u : repository.findAll()) {
 			if (u.getEmail().equals(email) && u.getSenha().equals(senha)) {
 				return u;

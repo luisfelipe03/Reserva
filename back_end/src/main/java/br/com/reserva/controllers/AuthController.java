@@ -33,10 +33,7 @@ public class AuthController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
-		
-		System.out.println("email: " + usuario.getEmail() + "\nsenha: " + usuario.getSenha());
-		
+	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {		
 		
 		Usuario usrLogado = service.autenticar(usuario.getEmail(),usuario.getSenha());
 		if(usrLogado != null) {
