@@ -3,6 +3,8 @@ package br.com.reserva.data.vo;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.com.reserva.models.Curso;
 import br.com.reserva.models.Turma;
 import br.com.reserva.utils.Cargos;
@@ -13,6 +15,7 @@ public class ProfessorVO {
 	private String nome;
 	private String cpf;
 	private String email;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String senha;
 	private Cargos cargo = Cargos.PROFESSOR;
 	private Curso curso;

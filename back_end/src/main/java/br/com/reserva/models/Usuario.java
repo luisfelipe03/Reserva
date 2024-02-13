@@ -1,24 +1,39 @@
-package br.com.reserva.data.vo;
+package br.com.reserva.models;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import br.com.reserva.utils.Cargos;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.Email;
 
-public class AdministradorVO {
-
-	private long id;
-	private String nome;
-	private String cpf;
-	private String email;
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private String senha;
-	private Cargos cargo = Cargos.ADMINISTRADOR;
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Usuario {
 	
-	public AdministradorVO () {
-		
-	}
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	@Column(nullable = false)
+	private String nome;
+	@Column(nullable = false, unique = true)
+	private String cpf;
+	@Column(nullable = false, unique = true)
+	@Email
+	private String email;
+	@Column(nullable = false)
+	private String senha;
+	@Enumerated(EnumType.STRING)
+	private Cargos cargo;
+	
+	public Usuario () {}
 
 	public long getId() {
 		return id;
@@ -81,17 +96,17 @@ public class AdministradorVO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AdministradorVO other = (AdministradorVO) obj;
+		Usuario other = (Usuario) obj;
 		return cargo == other.cargo && Objects.equals(cpf, other.cpf) && Objects.equals(email, other.email)
 				&& id == other.id && Objects.equals(nome, other.nome) && Objects.equals(senha, other.senha);
 	}
 
 	@Override
 	public String toString() {
-		return "AdministradorVO [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha
+		return "Usuario [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha
 				+ ", cargo=" + cargo + "]";
 	}
 	
 	
-	
+
 }
