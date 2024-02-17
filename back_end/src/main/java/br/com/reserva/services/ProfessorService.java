@@ -118,8 +118,7 @@ public class ProfessorService {
 				() -> new ResourceNotFoundException("Não existe professor cadastrado com id:" + professor.getId()));
 
 		entity.setTurmas(professor.getTurmas());
-		var vo = ModelMapper.parseObject(repository.save(entity), ProfessorVO.class);
-		return vo;
+		return ModelMapper.parseObject(repository.save(entity), ProfessorVO.class);
 	}
 
 }

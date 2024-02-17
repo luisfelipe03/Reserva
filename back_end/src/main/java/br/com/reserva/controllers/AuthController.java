@@ -3,7 +3,6 @@ package br.com.reserva.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +25,6 @@ public class AuthController {
 	AuthService service;
 	@Autowired
 	Facade facade;
-	
-	@GetMapping
-	public String test() {
-		return "Teste login :)";
-	}
 	
 	@PostMapping
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {		

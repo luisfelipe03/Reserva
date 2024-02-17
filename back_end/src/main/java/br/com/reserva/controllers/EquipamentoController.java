@@ -16,16 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.reserva.data.vo.EquipamentoVO;
 import br.com.reserva.facade.Facade;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 @RestController
 @RequestMapping("api/equipamento")
-@Tag(name = "Equipamento", description = "Endpoints para gerenciamento de equipamento")
 public class EquipamentoController {
 	
 	@Autowired
 	Facade facade;
-	
+
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<EquipamentoVO> getTodosEquip() {

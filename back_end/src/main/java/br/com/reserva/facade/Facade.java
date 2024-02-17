@@ -10,12 +10,14 @@ import br.com.reserva.data.vo.AlunoVO;
 import br.com.reserva.data.vo.EquipamentoVO;
 import br.com.reserva.data.vo.LaboratorioVO;
 import br.com.reserva.data.vo.ProfessorVO;
+import br.com.reserva.data.vo.ReservaVO;
 import br.com.reserva.data.vo.TurmaVO;
 import br.com.reserva.services.AdministradorService;
 import br.com.reserva.services.AlunoService;
 import br.com.reserva.services.EquipamentoService;
 import br.com.reserva.services.LaboratorioService;
 import br.com.reserva.services.ProfessorService;
+import br.com.reserva.services.ReservaService;
 
 @Service
 public class Facade {
@@ -146,4 +148,29 @@ public class Facade {
 	public void deleteLab(Long id) {
 		laboratorioService.delete(id);
 	}
+	
+	//Reserva------------------------------------------------------------------------------------------------
+	@Autowired
+	ReservaService reservaService;
+	
+	public List<ReservaVO> getAllReservas() {
+		return reservaService.findAll();
+	}
+	
+	public ReservaVO getByIdReserva(Long id) {
+		return reservaService.findById(id);
+	}
+	
+	public ReservaVO createReserva(ReservaVO reserva) {
+		return reservaService.create(reserva);
+	}
+	
+	public ReservaVO updateReserva(ReservaVO reserva) {
+		return reservaService.update(reserva);
+	}
+	
+	public void deleteReserva(Long id) {
+		reservaService.delete(id);
+	}
+	
 }
