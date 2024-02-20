@@ -26,32 +26,57 @@ public class ReservaVO {
 	}
 
 	public boolean conflitoReserva(List<Reserva> reservas, List<Equipamento> equipamentosR, Laboratorio laboratorioR,
-			LocalDateTime entregaR, LocalDateTime devolucaoR) {
+								   LocalDateTime entregaR, LocalDateTime devolucaoR) {
 
 		boolean conflitoEquipamento = false;
 		boolean conflitoLab = false;
 
-		for (Reserva r : reservas) {
-
-			if (equipamentosR != null) {
-				if (!Collections.disjoint(r.getEquipamentos(), equipamentosR))
-					conflitoEquipamento = true;
+		for (Reserva reserva : reservas) {
+			if (equipamentosR != null && !Collections.disjoint(reserva.getEquipamentos(), equipamentosR)) {
+				conflitoEquipamento = true;
 			}
 
-			if (laboratorioR != null) {
-				if(laboratorioR.equals(r.getLab()))
-					conflitoLab = true;
+			if (laboratorioR != null && laboratorioR.equals(reserva.getLab())) {
+				conflitoLab = true;
 			}
 
 			if (conflitoEquipamento || conflitoLab) {
-				if (r.getEntrega() != null && r.getDevolucao() != null && entregaR != null && devolucaoR != null
-						&& !entregaR.isBefore(r.getDevolucao())) {
-					return true;
+				if (verificaConflitoDeDatas(reserva.getEntrega(), reserva.getDevolucao(), entregaR, devolucaoR)) {
+					return false;
 				}
+			}
+		}
+
+		if (verificaCargoEquipamento(responsavel, equipamentosR) || verificaCargoLaboratorio(responsavel, laboratorioR)) {
+			 throw new RuntimeException("Usuário sem permissão para reservar equipamento ou laboratório");
+		}
+
+		return false;
+	}
+
+	private boolean verificaConflitoDeDatas(LocalDateTime entrega1, LocalDateTime devolucao1,
+											LocalDateTime entrega2, LocalDateTime devolucao2) {
+		return entrega1 != null && devolucao1 != null &&
+				entrega2 != null && devolucao2 != null;
+	}
+
+	public boolean verificaConflitoDevolucaoAntesEntrega(LocalDateTime entrega, LocalDateTime devolucao) {
+		return entrega.isAfter(devolucao);
+	}
+
+	private boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos) {
+		for (Equipamento equipamento : equipamentos) {
+			if (equipamento.getAcesso().contains(usuario.getCargo())) {
+				return true;
 			}
 		}
 		return false;
 	}
+
+	private boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio) {
+		return laboratorio != null && laboratorio.getAcesso().contains(usuario.getCargo());
+	}
+
 
 	public long getId() {
 		return id;

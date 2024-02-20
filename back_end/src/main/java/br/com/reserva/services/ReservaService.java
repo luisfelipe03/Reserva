@@ -41,13 +41,13 @@ public class ReservaService {
 		if (reserva == null)
 			throw new RequiredObjectIsNullException();
 
+		if(reserva.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new ConflitoReservaException("A data de devolução não pode ocorrer antes da data de entrega");
+		}
+
 		if(reserva.conflitoReserva(repository.findAll(),reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(),
 				reserva.getDevolucao())) {
 			throw new ConflitoReservaException();
-		}
-		
-		if(reserva.getDevolucao().isBefore(reserva.getEntrega())) {
-			throw new ConflitoReservaException("A data de devolução não pode ocorrer antes da data de entrega");
 		}
 		
 		logger.info("Cadastrando uma reserva");
@@ -59,6 +59,10 @@ public class ReservaService {
 	public ReservaVO update(ReservaVO reserva) {
 		if (reserva == null)
 			throw new RequiredObjectIsNullException();
+
+		if(reserva.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new ConflitoReservaException("A data de devolução não pode ocorrer antes da data de entrega");
+		}
 		
 //		if(reserva.conflitoReserva(repository.findAll(),reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(),
 //				reserva.getDevolucao())) 

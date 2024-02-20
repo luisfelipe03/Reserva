@@ -5,14 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import br.com.reserva.utils.StatusReserva;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Reserva {
@@ -26,7 +19,9 @@ public class Reserva {
 	private Laboratorio lab;
 	@ManyToOne
 	private Usuario responsavel;
+	@Column(nullable = false)
 	private LocalDateTime entrega;
+	@Column(nullable = false)
 	private LocalDateTime devolucao;
 	@Enumerated(EnumType.STRING)
 	private StatusReserva status;

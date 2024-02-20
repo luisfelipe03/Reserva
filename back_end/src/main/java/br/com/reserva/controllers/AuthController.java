@@ -34,18 +34,18 @@ public class AuthController {
 			if(usrLogado.getCargo() == Cargos.ADMINISTRADOR) {
 				var adm = facade.getByIdAdm(usrLogado.getId());
 				var admResponse = ModelMapper.parseObject(adm, Administrador.class);
-				return ResponseEntity.ok(admResponse);
+				return ResponseEntity.status(HttpStatus.OK).body(admResponse);
 				
 			}
 			if(usrLogado.getCargo() == Cargos.PROFESSOR) {
 				var prof = facade.getByIdProfessor(usrLogado.getId());
 				var profResponse = ModelMapper.parseObject(prof, Professor.class);
-				return ResponseEntity.ok(profResponse);
+				return ResponseEntity.status(HttpStatus.OK).body(profResponse);
 			}
 			if(usrLogado.getCargo() == Cargos.ADMINISTRADOR) {
 				var aluno = facade.getByIdAdm(usrLogado.getId());
 				var alunoResponse = ModelMapper.parseObject(aluno, Aluno.class);
-				return ResponseEntity.ok(alunoResponse);
+				return ResponseEntity.status(HttpStatus.OK).body(alunoResponse);
 			}
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(usrLogado);
