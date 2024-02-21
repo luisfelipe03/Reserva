@@ -1,13 +1,17 @@
 package br.com.reserva.services;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import br.com.reserva.models.Equipamento;
+import br.com.reserva.models.Laboratorio;
+import br.com.reserva.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.reserva.data.vo.ReservaVO;
-import br.com.reserva.excepions.ConflitoReservaException;
 import br.com.reserva.excepions.RequiredObjectIsNullException;
 import br.com.reserva.excepions.ResourceNotFoundException;
 import br.com.reserva.mapper.ModelMapper;
@@ -37,39 +41,45 @@ public class ReservaService {
 		return ModelMapper.parseObject(entity, ReservaVO.class);
 	}
 
-	public ReservaVO create(ReservaVO reserva) {
-		if (reserva == null)
+	public ReservaVO create(ReservaVO reservaVO) {
+		if (reservaVO == null)
 			throw new RequiredObjectIsNullException();
 
-		if(reserva.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
-			throw new ConflitoReservaException("A data de devolução não pode ocorrer antes da data de entrega");
+		// Converte ReservaVO para entidade Reserva para realizar a verificação
+		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
+
+		// Verifica se a data de devolução é anterior à data de entrega
+		if (verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
 		}
 
-		if(reserva.conflitoReserva(repository.findAll(),reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(),
-				reserva.getDevolucao())) {
-			throw new ConflitoReservaException();
+		// Verifica se há conflito de reserva
+		if (conflitoReserva(reserva.getResponsavel(),repository.findAll(), reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("Conflito encontrado na reserva");
 		}
-		
+
+		// Realiza o cadastro da reserva
 		logger.info("Cadastrando uma reserva");
+		Reserva savedReserva = repository.save(reserva);
 
-		var entity = ModelMapper.parseObject(reserva, Reserva.class);
-		return ModelMapper.parseObject(repository.save(entity), ReservaVO.class);
+		return ModelMapper.parseObject(savedReserva, ReservaVO.class);
 	}
 
-	public ReservaVO update(ReservaVO reserva) {
-		if (reserva == null)
+	public ReservaVO update(ReservaVO reservaVO) {
+		if (reservaVO == null)
 			throw new RequiredObjectIsNullException();
 
-		if(reserva.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
-			throw new ConflitoReservaException("A data de devolução não pode ocorrer antes da data de entrega");
+		// Converte ReservaVO para entidade Reserva para realizar a verificação
+		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
+
+		// Verifica se a data de devolução é anterior à data de entrega
+		if (verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
 		}
-		
-//		if(reserva.conflitoReserva(repository.findAll(),reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(),
-//				reserva.getDevolucao())) 
-//			throw new ConflitoReservaException();
-		
-		if(reserva.getDevolucao().isBefore(reserva.getEntrega())) {
-			throw new ConflitoReservaException("A data de devolução não pode ocorrer antes da data de entrega");
+
+		// Verifica se há conflito de reserva
+		if (conflitoReserva(reserva.getResponsavel(),repository.findAll(), reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("Conflito encontrado na reserva");
 		}
 
 		logger.info("Atualizando cadastro de reserva");
@@ -94,5 +104,49 @@ public class ReservaService {
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe reserva cadastrado com id: " + id));
 
 		repository.delete(entity);
+	}
+
+	public boolean conflitoReserva(Usuario responsavel, List<Reserva> reservas, List<Equipamento> equipamentosR, Laboratorio laboratorioR,
+								   LocalDateTime entregaR, LocalDateTime devolucaoR) {
+
+		if (verificaCargoEquipamento(responsavel, equipamentosR) || verificaCargoLaboratorio(responsavel, laboratorioR)) {
+			throw new RuntimeException("Usuário sem permissão para reservar equipamento ou laboratório");
+		}
+
+		for (Reserva reserva : reservas) {
+			boolean conflitoEquipamento = equipamentosR != null && !Collections.disjoint(reserva.getEquipamentos(), equipamentosR);
+			boolean conflitoLab = laboratorioR != null && laboratorioR.equals(reserva.getLab());
+
+			if ((conflitoEquipamento || conflitoLab) && verificaConflitoDeDatas(reserva.getEntrega(), reserva.getDevolucao(), entregaR, devolucaoR)) {
+				return true; // Há um conflito
+			}
+		}
+
+		return false; // Não há conflito
+	}
+
+
+	private boolean verificaConflitoDeDatas(LocalDateTime inicioReserva1, LocalDateTime fimReserva1,
+											LocalDateTime inicioReserva2, LocalDateTime fimReserva2) {
+		// Verifica se há sobreposição entre os intervalos de tempo
+		return !inicioReserva1.isAfter(fimReserva2) && !inicioReserva2.isAfter(fimReserva1);
+	}
+
+
+	public boolean verificaConflitoDevolucaoAntesEntrega(LocalDateTime entrega, LocalDateTime devolucao) {
+		return entrega.isAfter(devolucao);
+	}
+
+	private boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos) {
+		for (Equipamento equipamento : equipamentos) {
+			if (equipamento.getAcesso().contains(usuario.getCargo())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio) {
+		return laboratorio != null && laboratorio.getAcesso().contains(usuario.getCargo());
 	}
 }
