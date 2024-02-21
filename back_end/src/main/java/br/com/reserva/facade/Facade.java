@@ -76,6 +76,10 @@ public class Facade {
 	public void deleteProfessor(Long id) {
 		professorService.delete(id);
 	}
+
+	public void deleteTurma(Long idTurma, Long idProf) {
+		professorService.deleteTurma(idTurma, idProf);
+	}
 	
 	//Administrador----------------------------------------------------------------------------------------
 	@Autowired
@@ -172,5 +176,6 @@ public class Facade {
 	public void deleteReserva(Long id) {
 		reservaService.delete(id);
 	}
-	
+
+
 }

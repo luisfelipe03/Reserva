@@ -89,11 +89,7 @@ public class ProfessorController {
 	@Operation(summary = "Cadastra uma turma para um professor", description = "Cadastra uma nova turma associada a um professor específico",
 			tags = {"Professores"},
 			responses = {
-					@ApiResponse(description = "Created", responseCode = "201",
-							content = @Content(
-									mediaType = "application/json",
-									schema = @Schema(implementation = ProfessorVO.class)
-							)),
+					@ApiResponse(description = "Created", responseCode = "201"),
 					@ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
 					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
 					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
@@ -152,6 +148,10 @@ public class ProfessorController {
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deleteProfessor(@PathVariable(value = "id") Long id) {
 		facade.deleteProfessor(id);
+	}
+	@DeleteMapping(value = "/{idProf}/deletaTurma/{idTurma}")
+	public void deleteTurma(@PathVariable(value = "idTurma") Long idTurma, @PathVariable(value = "idProf") Long idProf) {
+		facade.deleteTurma(idTurma,idProf);
 	}
 
 }

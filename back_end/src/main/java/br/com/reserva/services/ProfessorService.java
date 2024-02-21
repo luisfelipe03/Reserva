@@ -122,4 +122,25 @@ public class ProfessorService {
 		return ModelMapper.parseObject(repository.save(entity), ProfessorVO.class);
 	}
 
+	public void deleteTurma(Long idTurma, Long idProf) {
+
+		logger.info("Deletando Turma pelo id");
+
+		// Obtém a entidade do repositório ou lança uma exceção se não existir
+		var entity = turmaRepository.findById(idTurma)
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe professor cadastrado com id: " + idTurma));
+
+		var prof = repository.findById(idProf).orElseThrow(
+				() -> new ResourceNotFoundException("Não existe professor cadastrado com id:" + idProf));
+
+		if(!prof.getTurmas().contains(entity)) {
+			throw new ResourceNotFoundException("Não existe turma cadastrada com id: " + idTurma + " para o professor com id: " + idProf);
+		}
+
+		prof.getTurmas().remove(entity);
+		repository.save(prof);
+		// Exclui a entidade do repositório
+		turmaRepository.delete(entity);
+	}
+
 }
