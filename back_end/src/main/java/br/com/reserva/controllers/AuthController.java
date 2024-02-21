@@ -1,5 +1,10 @@
 package br.com.reserva.controllers;
 
+import br.com.reserva.data.vo.UsuarioVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +30,20 @@ public class AuthController {
 	AuthService service;
 	@Autowired
 	Facade facade;
-	
+
 	@PostMapping
+	@Operation(summary = "Autentica um usuário", description = "Realiza a autenticação de um usuário e retorna os detalhes do usuário com base no cargo",
+			tags = {"Login"},
+			responses = {
+					@ApiResponse(description = "OK - Autenticado", responseCode = "200",
+							content = @Content(
+									mediaType = "application/json",
+									schema = @Schema(implementation = UsuarioVO.class)
+							)),
+					@ApiResponse(description = "Unauthorized - Credenciais inválidas", responseCode = "401", content = @Content),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			}
+	)
 	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {		
 		
 		Usuario usrLogado = service.autenticar(usuario.getEmail(),usuario.getSenha());
@@ -42,7 +59,7 @@ public class AuthController {
 				var profResponse = ModelMapper.parseObject(prof, Professor.class);
 				return ResponseEntity.status(HttpStatus.OK).body(profResponse);
 			}
-			if(usrLogado.getCargo() == Cargos.ADMINISTRADOR) {
+			if(usrLogado.getCargo() == Cargos.ALUNO) {
 				var aluno = facade.getByIdAdm(usrLogado.getId());
 				var alunoResponse = ModelMapper.parseObject(aluno, Aluno.class);
 				return ResponseEntity.status(HttpStatus.OK).body(alunoResponse);
