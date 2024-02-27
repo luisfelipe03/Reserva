@@ -14,7 +14,7 @@ import br.com.reserva.models.Laboratorio;
 import br.com.reserva.repositories.LaboratorioRepository;
 
 @Service
-public class LaboratorioServiceImpl {
+public class LaboratorioServiceImpl implements LaboratorioService {
 
 	// Logger para registrar mensagens de log
 		private Logger logger = Logger.getLogger(LaboratorioServiceImpl.class.getName());
