@@ -2,6 +2,12 @@ package br.com.reserva.facade;
 
 import java.util.List;
 
+import br.com.reserva.excepions.RequiredObjectIsNullException;
+import br.com.reserva.excepions.ResourceNotFoundException;
+import br.com.reserva.mapper.ModelMapper;
+import br.com.reserva.models.Aluno;
+import br.com.reserva.models.Reserva;
+import br.com.reserva.utils.StatusReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +49,10 @@ public class Facade {
 	}
 	public void deleteAluno(Long id) {
 		alunoService.delete(id);
+	}
+
+	public List<AlunoVO> getAlunosBloqueados() {
+		return alunoService.findAlunosBloqueados();
 	}
 
 	//Professor---------------------------------------------------------------------
@@ -103,6 +113,18 @@ public class Facade {
 	
 	public void deleteAdm(Long id) {
 		administradorService.delete(id);
+	}
+
+	public ReservaVO updateStatusReserva(long idReserva, StatusReserva status) {
+		return administradorService.updateStatusReserva(idReserva, status);
+
+	}
+
+	public AlunoVO bloquearAluno(Long idAluno) {
+		return administradorService.bloquearAcesso(idAluno);
+	}
+	public AlunoVO liberarAluno(Long idAluno) {
+		return administradorService.liberarAcesso(idAluno);
 	}
 	
 	//Equipamento--------------------------------------------------------------------------------------------
@@ -165,12 +187,49 @@ public class Facade {
 		return reservaService.findById(id);
 	}
 	
-	public ReservaVO createReserva(ReservaVO reserva) {
-		return reservaService.create(reserva);
+	public ReservaVO createReserva(ReservaVO reservaVO) {
+		if (reservaVO == null)
+			throw new RequiredObjectIsNullException();
+
+		// Converte ReservaVO para entidade Reserva para realizar a verificação
+		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
+
+		// Verifica se a data de devolução é anterior à data de entrega
+		if (reservaService.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
+		}
+
+		List<ReservaVO> reservasVO = reservaService.findAll();
+		var reservas = ModelMapper.parseListObjects(reservasVO, Reserva.class);
+
+		// Verifica se há conflito de reserva
+		if (reservaService.conflitoReserva(reserva.getResponsavel(),reservas, reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("Conflito encontrado na reserva");
+		}
+		return reservaService.create(reservaVO);
 	}
 	
-	public ReservaVO updateReserva(ReservaVO reserva) {
-		return reservaService.update(reserva);
+	public ReservaVO updateReserva(ReservaVO reservaVO) {
+		if (reservaVO == null)
+			throw new RequiredObjectIsNullException();
+
+		// Converte ReservaVO para entidade Reserva para realizar a verificação
+		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
+
+		// Verifica se a data de devolução é anterior à data de entrega
+		if (reservaService.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
+		}
+
+		List<ReservaVO> reservasVO = reservaService.findAll();
+		var reservas = ModelMapper.parseListObjects(reservasVO, Reserva.class);
+		// Verifica se há conflito de reserva
+		if (reservaService.conflitoReserva(reserva.getResponsavel(),reservas, reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
+			throw new RuntimeException("Conflito encontrado na reserva");
+		}
+
+		var vo = ModelMapper.parseObject(reserva, ReservaVO.class);
+		return reservaService.update(vo);
 	}
 	
 	public void deleteReserva(Long id) {

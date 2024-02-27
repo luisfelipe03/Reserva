@@ -3,6 +3,12 @@ package br.com.reserva.services;
 import java.util.List;
 import java.util.logging.Logger;
 
+import br.com.reserva.data.vo.AlunoVO;
+import br.com.reserva.data.vo.ReservaVO;
+import br.com.reserva.repositories.AlunoRepository;
+import br.com.reserva.repositories.ReservaRepository;
+import br.com.reserva.utils.Cargos;
+import br.com.reserva.utils.StatusReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +27,10 @@ public class AdministradorService {
 	// Repositório de Administradores injetado usando a anotação @Autowired
 	@Autowired
 	AdministradorRepository repository;
+	@Autowired
+	ReservaRepository reservaRepository;
+	@Autowired
+	AlunoRepository alunoRepository;
 	
 	// Método para obter todos os administradores cadastrados
 	public List<AdministradorVO> getAll() {
@@ -82,6 +92,53 @@ public class AdministradorService {
 		
 		// Exclui a entidade do repositório
 		repository.delete(entity);
+	}
+
+	public ReservaVO updateStatusReserva(long idReserva, StatusReserva status) {
+		logger.info("Atualizando status da reserva");
+
+		// Obtém a entidade existente do repositório ou lança uma exceção se não existir
+		var entity = reservaRepository.findById(idReserva)
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe reserva cadastrada com id:" + idReserva));
+
+		// Atualiza os campos da entidade com base nos dados do objeto VO
+		entity.setStatus(status);
+
+		// Converte a entidade atualizada de volta para um objeto VO e salva no repositório
+		var vo = ModelMapper.parseObject(reservaRepository.save(entity), ReservaVO.class);
+		return vo;
+	}
+
+	public AlunoVO bloquearAcesso(long idAluno) {
+		logger.info("Bloqueando acesso do aluno");
+
+		// Obtém a entidade existente do repositório ou lança uma exceção se não existir
+		var entity = alunoRepository.findById(idAluno)
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe aluno cadastrado com id:" + idAluno));
+
+		// Atualiza os campos da entidade com base nos dados do objeto VO
+		entity.setCargo(Cargos.BLOQUEADO);
+
+		// Converte a entidade atualizada de volta para um objeto VO e salva no repositório
+		var vo = ModelMapper.parseObject(alunoRepository.save(entity), AlunoVO.class);
+		return vo;
+	}
+	public AlunoVO liberarAcesso(long idAluno) {
+		logger.info("Liberando acesso do aluno");
+
+		// Obtém a entidade existente do repositório ou lança uma exceção se não existir
+		var entity = alunoRepository.findById(idAluno)
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe aluno cadastrado com id:" + idAluno));
+
+		if(entity.getCargo() != Cargos.BLOQUEADO){
+			throw new ResourceNotFoundException("O aluno não está bloqueado");
+		}
+		// Atualiza os campos da entidade com base nos dados do objeto VO
+		entity.setCargo(Cargos.ALUNO);
+
+		// Converte a entidade atualizada de volta para um objeto VO e salva no repositório
+		var vo = ModelMapper.parseObject(alunoRepository.save(entity), AlunoVO.class);
+		return vo;
 	}
 
 }

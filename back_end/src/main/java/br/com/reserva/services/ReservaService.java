@@ -34,54 +34,19 @@ public class ReservaService {
 
 	public ReservaVO findById(Long id) {
 		logger.info("Listando reservas pelo id");
-
 		var entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe reserva cadastrado com id: " + id));
-
-		return ModelMapper.parseObject(entity, ReservaVO.class);
+		return ModelMapper.parseObject(repository.findById(id), ReservaVO.class);
 	}
 
 	public ReservaVO create(ReservaVO reservaVO) {
-		if (reservaVO == null)
-			throw new RequiredObjectIsNullException();
-
-		// Converte ReservaVO para entidade Reserva para realizar a verificação
-		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
-
-		// Verifica se a data de devolução é anterior à data de entrega
-		if (verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
-			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
-		}
-
-		// Verifica se há conflito de reserva
-		if (conflitoReserva(reserva.getResponsavel(),repository.findAll(), reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
-			throw new RuntimeException("Conflito encontrado na reserva");
-		}
-
 		// Realiza o cadastro da reserva
 		logger.info("Cadastrando uma reserva");
-		Reserva savedReserva = repository.save(reserva);
-
+		Reserva savedReserva = repository.save(ModelMapper.parseObject(reservaVO, Reserva.class));
 		return ModelMapper.parseObject(savedReserva, ReservaVO.class);
 	}
 
-	public ReservaVO update(ReservaVO reservaVO) {
-		if (reservaVO == null)
-			throw new RequiredObjectIsNullException();
-
-		// Converte ReservaVO para entidade Reserva para realizar a verificação
-		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
-
-		// Verifica se a data de devolução é anterior à data de entrega
-		if (verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
-			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
-		}
-
-		// Verifica se há conflito de reserva
-		if (conflitoReserva(reserva.getResponsavel(),repository.findAll(), reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
-			throw new RuntimeException("Conflito encontrado na reserva");
-		}
-
+	public ReservaVO update(ReservaVO reserva) {
 		logger.info("Atualizando cadastro de reserva");
 
 		var entity = repository.findById(reserva.getId()).orElseThrow(
@@ -126,7 +91,7 @@ public class ReservaService {
 	}
 
 
-	private boolean verificaConflitoDeDatas(LocalDateTime inicioReserva1, LocalDateTime fimReserva1,
+	public boolean verificaConflitoDeDatas(LocalDateTime inicioReserva1, LocalDateTime fimReserva1,
 											LocalDateTime inicioReserva2, LocalDateTime fimReserva2) {
 		// Verifica se há sobreposição entre os intervalos de tempo
 		return !inicioReserva1.isAfter(fimReserva2) && !inicioReserva2.isAfter(fimReserva1);
@@ -137,7 +102,7 @@ public class ReservaService {
 		return entrega.isAfter(devolucao);
 	}
 
-	private boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos) {
+	public boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos) {
 		for (Equipamento equipamento : equipamentos) {
 			if (equipamento.getAcesso().contains(usuario.getCargo())) {
 				return true;
@@ -146,7 +111,7 @@ public class ReservaService {
 		return false;
 	}
 
-	private boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio) {
+	public boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio) {
 		return laboratorio != null && laboratorio.getAcesso().contains(usuario.getCargo());
 	}
 }

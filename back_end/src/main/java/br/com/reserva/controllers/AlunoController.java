@@ -67,6 +67,23 @@ public class AlunoController {
 		return facade.getByIdAluno(id);
 	}
 
+	@GetMapping(value = "/bloqueados", produces={"application/json"})
+	@Operation(summary = "Busca todos os alunos bloqueados", description = "Busca todos os alunos bloqueados cadastrados no banco de dados",
+			tags = {"Alunos"},
+			responses = {
+					@ApiResponse(description = "Success", responseCode = "200",
+							content = @Content(
+									mediaType = "application/json",
+									array = @ArraySchema(schema = @Schema(implementation = AlunoVO.class))
+							)),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			}
+	)
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<AlunoVO> getAlunosBloqueados() {
+		return facade.getAlunosBloqueados();
+	}
+
 	@PostMapping(produces={"application/json"}, consumes={"application/json"})
 	@Operation(summary = "Cria um novo aluno", description = "Cadastra um novo aluno no banco de dados",
 			tags = {"Alunos"},

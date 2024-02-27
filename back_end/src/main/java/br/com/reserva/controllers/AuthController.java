@@ -1,5 +1,6 @@
 package br.com.reserva.controllers;
 
+import br.com.reserva.data.vo.AlunoVO;
 import br.com.reserva.data.vo.UsuarioVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,7 +45,7 @@ public class AuthController {
 					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
 			}
 	)
-	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {		
+	public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
 		
 		Usuario usrLogado = service.autenticar(usuario.getEmail(),usuario.getSenha());
 		if(usrLogado != null) {
@@ -52,7 +53,6 @@ public class AuthController {
 				var adm = facade.getByIdAdm(usrLogado.getId());
 				var admResponse = ModelMapper.parseObject(adm, Administrador.class);
 				return ResponseEntity.status(HttpStatus.OK).body(admResponse);
-				
 			}
 			if(usrLogado.getCargo() == Cargos.PROFESSOR) {
 				var prof = facade.getByIdProfessor(usrLogado.getId());
