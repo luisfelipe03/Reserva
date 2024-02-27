@@ -1,6 +1,5 @@
 package br.com.reserva.controllers;
 
-import br.com.reserva.data.vo.AlunoVO;
 import br.com.reserva.data.vo.UsuarioVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +19,7 @@ import br.com.reserva.models.Administrador;
 import br.com.reserva.models.Aluno;
 import br.com.reserva.models.Professor;
 import br.com.reserva.models.Usuario;
-import br.com.reserva.services.AuthService;
+import br.com.reserva.services.AuthServiceImpl;
 import br.com.reserva.utils.Cargos;
 
 @RestController
@@ -28,7 +27,7 @@ import br.com.reserva.utils.Cargos;
 public class AuthController {
 	
 	@Autowired
-	AuthService service;
+	AuthServiceImpl service;
 	@Autowired
 	Facade facade;
 

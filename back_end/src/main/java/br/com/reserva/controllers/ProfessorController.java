@@ -67,6 +67,24 @@ public class ProfessorController {
 		return facade.getByIdProfessor(id);
 	}
 
+	@GetMapping(value = "/{id}/turmas", produces={"application/json"})
+	@Operation(summary = "Busca todas as turmas de um professor", description = "Busca todas as turmas associadas a um professor específico",
+			tags = {"Professores", "Turmas"},
+			responses = {
+					@ApiResponse(description = "Success", responseCode = "200",
+							content = @Content(
+									mediaType = "application/json",
+									array = @ArraySchema(schema = @Schema(implementation = TurmaVO.class))
+							)),
+					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			}
+	)
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<TurmaVO> getTurmas(@PathVariable(value = "id") Long id) {
+		return facade.getTurmas(id);
+	}
+
 	@PostMapping(produces={"application/json"}, consumes={"application/json"})
 	@Operation(summary = "Cria um novo professor", description = "Cadastra um novo professor no banco de dados",
 			tags = {"Professores"},

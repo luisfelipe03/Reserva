@@ -3,9 +3,7 @@ package br.com.reserva.facade;
 import java.util.List;
 
 import br.com.reserva.excepions.RequiredObjectIsNullException;
-import br.com.reserva.excepions.ResourceNotFoundException;
 import br.com.reserva.mapper.ModelMapper;
-import br.com.reserva.models.Aluno;
 import br.com.reserva.models.Reserva;
 import br.com.reserva.utils.StatusReserva;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,173 +16,176 @@ import br.com.reserva.data.vo.LaboratorioVO;
 import br.com.reserva.data.vo.ProfessorVO;
 import br.com.reserva.data.vo.ReservaVO;
 import br.com.reserva.data.vo.TurmaVO;
-import br.com.reserva.services.AdministradorService;
-import br.com.reserva.services.AlunoService;
-import br.com.reserva.services.EquipamentoService;
-import br.com.reserva.services.LaboratorioService;
-import br.com.reserva.services.ProfessorService;
-import br.com.reserva.services.ReservaService;
+import br.com.reserva.services.AdministradorServiceImpl;
+import br.com.reserva.services.AlunoServiceImpl;
+import br.com.reserva.services.EquipamentoServiceImpl;
+import br.com.reserva.services.LaboratorioServiceImpl;
+import br.com.reserva.services.ProfessorServiceImpl;
+import br.com.reserva.services.ReservaServiceImpl;
 
 @Service
 public class Facade {
 	
 	//Aluno---------------------------------------------------------------------
 	@Autowired
-	AlunoService alunoService;
+	AlunoServiceImpl alunoServiceImpl;
 
 	public List<AlunoVO> getAllAlunos(){
-		return alunoService.findAll();
+		return alunoServiceImpl.findAll();
 	}
 
 	public AlunoVO getByIdAluno(Long id) {
-		return alunoService.findById(id);
+		return alunoServiceImpl.findById(id);
 	}
 
 	public AlunoVO saveAluno(AlunoVO alunoNovo) {
-		return alunoService.create(alunoNovo);
+		return alunoServiceImpl.create(alunoNovo);
 	}
 
 	public AlunoVO updateAluno(AlunoVO alunoAtualizado) {
-		return alunoService.update(alunoAtualizado);
+		return alunoServiceImpl.update(alunoAtualizado);
 	}
 	public void deleteAluno(Long id) {
-		alunoService.delete(id);
+		alunoServiceImpl.delete(id);
 	}
 
 	public List<AlunoVO> getAlunosBloqueados() {
-		return alunoService.findAlunosBloqueados();
+		return alunoServiceImpl.findAlunosBloqueados();
 	}
 
 	//Professor---------------------------------------------------------------------
 	@Autowired
-	ProfessorService professorService;
+	ProfessorServiceImpl professorServiceImpl;
 
 	public List<ProfessorVO> getAllProfessor(){
-		return professorService.findAll();
+		return professorServiceImpl.findAll();
 	}
 
 	public ProfessorVO getByIdProfessor(Long id) {
-		return professorService.findById(id);
+		return professorServiceImpl.findById(id);
 	}
 
 	public ProfessorVO saveProfessor(ProfessorVO professorNovo) {
-		return professorService.create(professorNovo);
+		return professorServiceImpl.create(professorNovo);
 	}
 	
 	public ProfessorVO createTurma(long id, TurmaVO turma) {
-		professorService.createTurma(id, turma);
-		return professorService.findById(id);
+		professorServiceImpl.createTurma(id, turma);
+		return professorServiceImpl.findById(id);
 	}
 	
 	public void updateTurma(ProfessorVO professorVO) {
-		professorService.updateTurma(professorVO);
+		professorServiceImpl.updateTurma(professorVO);
 	}
 
 	public ProfessorVO updateProfessor(ProfessorVO professorAtualizado) {
-		return professorService.update(professorAtualizado);
+		return professorServiceImpl.update(professorAtualizado);
 	}
 	public void deleteProfessor(Long id) {
-		professorService.delete(id);
+		professorServiceImpl.delete(id);
 	}
 
 	public void deleteTurma(Long idTurma, Long idProf) {
-		professorService.deleteTurma(idTurma, idProf);
+		professorServiceImpl.deleteTurma(idTurma, idProf);
 	}
-	
+
+	public List<TurmaVO> getTurmas(Long id) {
+		return professorServiceImpl.findTurmasByProfessorId(id);
+	}
 	//Administrador----------------------------------------------------------------------------------------
 	@Autowired
-	AdministradorService administradorService;
+	AdministradorServiceImpl administradorServiceImpl;
 	
 	public List<AdministradorVO> getAllAdm() {
-		return administradorService.getAll();
+		return administradorServiceImpl.getAll();
 	}
 	
 	public AdministradorVO getByIdAdm(Long id) {
-		return administradorService.getById(id);
+		return administradorServiceImpl.getById(id);
 	}
 	
 	public AdministradorVO createAdm(AdministradorVO adm) {
-		return administradorService.create(adm);
+		return administradorServiceImpl.create(adm);
 	}
 	
 	public AdministradorVO updateAdm(AdministradorVO adm) {
-		return administradorService.update(adm);
+		return administradorServiceImpl.update(adm);
 	}
 	
 	public void deleteAdm(Long id) {
-		administradorService.delete(id);
+		administradorServiceImpl.delete(id);
 	}
 
 	public ReservaVO updateStatusReserva(long idReserva, StatusReserva status) {
-		return administradorService.updateStatusReserva(idReserva, status);
+		return administradorServiceImpl.updateStatusReserva(idReserva, status);
 
 	}
 
 	public AlunoVO bloquearAluno(Long idAluno) {
-		return administradorService.bloquearAcesso(idAluno);
+		return administradorServiceImpl.bloquearAcesso(idAluno);
 	}
 	public AlunoVO liberarAluno(Long idAluno) {
-		return administradorService.liberarAcesso(idAluno);
+		return administradorServiceImpl.liberarAcesso(idAluno);
 	}
 	
 	//Equipamento--------------------------------------------------------------------------------------------
 	@Autowired
-	EquipamentoService equipamentoService;
+	EquipamentoServiceImpl equipamentoServiceImpl;
 	
 	public List<EquipamentoVO> getAllEquip() {
-		return equipamentoService.findAll();
+		return equipamentoServiceImpl.findAll();
 	}
 	
 	public EquipamentoVO getByIdEquip(Long id) {
-		return equipamentoService.findById(id);
+		return equipamentoServiceImpl.findById(id);
 	}
 	
 	public EquipamentoVO createEquip(EquipamentoVO equip) {
-		return equipamentoService.create(equip);
+		return equipamentoServiceImpl.create(equip);
 	}
 	
 	public EquipamentoVO updateEquip(EquipamentoVO equip) {
-		return equipamentoService.update(equip);
+		return equipamentoServiceImpl.update(equip);
 	}
 	
 	public void deleteEquip(Long id) {
-		equipamentoService.delete(id);
+		equipamentoServiceImpl.delete(id);
 	}
 	
 	//Laboratorio------------------------------------------------------------------------------------------------
 	@Autowired
-	LaboratorioService laboratorioService;
+	LaboratorioServiceImpl laboratorioServiceImpl;
 	
 	public List<LaboratorioVO> getAllLab() {
-		return laboratorioService.findAll();
+		return laboratorioServiceImpl.findAll();
 	}
 	
 	public LaboratorioVO getByIdLab(Long id) {
-		return laboratorioService.findById(id);
+		return laboratorioServiceImpl.findById(id);
 	}
 	
 	public LaboratorioVO createLab(LaboratorioVO lab) {
-		return laboratorioService.create(lab);
+		return laboratorioServiceImpl.create(lab);
 	}
 	
 	public LaboratorioVO updateLab(LaboratorioVO lab) {
-		return laboratorioService.update(lab);
+		return laboratorioServiceImpl.update(lab);
 	}
 	
 	public void deleteLab(Long id) {
-		laboratorioService.delete(id);
+		laboratorioServiceImpl.delete(id);
 	}
 	
 	//Reserva------------------------------------------------------------------------------------------------
 	@Autowired
-	ReservaService reservaService;
+	ReservaServiceImpl reservaServiceImpl;
 	
 	public List<ReservaVO> getAllReservas() {
-		return reservaService.findAll();
+		return reservaServiceImpl.findAll();
 	}
 	
 	public ReservaVO getByIdReserva(Long id) {
-		return reservaService.findById(id);
+		return reservaServiceImpl.findById(id);
 	}
 	
 	public ReservaVO createReserva(ReservaVO reservaVO) {
@@ -195,18 +196,18 @@ public class Facade {
 		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
 
 		// Verifica se a data de devolução é anterior à data de entrega
-		if (reservaService.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+		if (reservaServiceImpl.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
 			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
 		}
 
-		List<ReservaVO> reservasVO = reservaService.findAll();
+		List<ReservaVO> reservasVO = reservaServiceImpl.findAll();
 		var reservas = ModelMapper.parseListObjects(reservasVO, Reserva.class);
 
 		// Verifica se há conflito de reserva
-		if (reservaService.conflitoReserva(reserva.getResponsavel(),reservas, reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
+		if (reservaServiceImpl.conflitoReserva(reserva.getResponsavel(),reservas, reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
 			throw new RuntimeException("Conflito encontrado na reserva");
 		}
-		return reservaService.create(reservaVO);
+		return reservaServiceImpl.create(reservaVO);
 	}
 	
 	public ReservaVO updateReserva(ReservaVO reservaVO) {
@@ -217,23 +218,23 @@ public class Facade {
 		Reserva reserva = ModelMapper.parseObject(reservaVO, Reserva.class);
 
 		// Verifica se a data de devolução é anterior à data de entrega
-		if (reservaService.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
+		if (reservaServiceImpl.verificaConflitoDevolucaoAntesEntrega(reserva.getEntrega(), reserva.getDevolucao())) {
 			throw new RuntimeException("A data de devolução não pode ocorrer antes da data de entrega");
 		}
 
-		List<ReservaVO> reservasVO = reservaService.findAll();
+		List<ReservaVO> reservasVO = reservaServiceImpl.findAll();
 		var reservas = ModelMapper.parseListObjects(reservasVO, Reserva.class);
 		// Verifica se há conflito de reserva
-		if (reservaService.conflitoReserva(reserva.getResponsavel(),reservas, reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
+		if (reservaServiceImpl.conflitoReserva(reserva.getResponsavel(),reservas, reserva.getEquipamentos(), reserva.getLab(), reserva.getEntrega(), reserva.getDevolucao())) {
 			throw new RuntimeException("Conflito encontrado na reserva");
 		}
 
 		var vo = ModelMapper.parseObject(reserva, ReservaVO.class);
-		return reservaService.update(vo);
+		return reservaServiceImpl.update(vo);
 	}
 	
 	public void deleteReserva(Long id) {
-		reservaService.delete(id);
+		reservaServiceImpl.delete(id);
 	}
 
 

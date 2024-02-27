@@ -14,10 +14,10 @@ import br.com.reserva.models.Laboratorio;
 import br.com.reserva.repositories.LaboratorioRepository;
 
 @Service
-public class LaboratorioService {
+public class LaboratorioServiceImpl {
 
 	// Logger para registrar mensagens de log
-		private Logger logger = Logger.getLogger(LaboratorioService.class.getName());
+		private Logger logger = Logger.getLogger(LaboratorioServiceImpl.class.getName());
 		
 		@Autowired
 		LaboratorioRepository repository;
