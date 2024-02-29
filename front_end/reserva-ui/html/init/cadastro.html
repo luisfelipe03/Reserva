@@ -10,7 +10,7 @@
 
 <nav class="navbar navbar-light navbar-custom" style="background-color: #007bff;">
     <div class="container-fluid">
-      <span class="navbar-brand mb-0 h1" style="color: white;">Cadastro de Aluno</span>
+      <span class="navbar-brand mb-0 h1" style="color: white;">Reserva - Cadastro de Aluno</span>
     </div>
 </nav>
 
@@ -108,7 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(data => {
       console.log('Success:', data);
       alert('Cadastro realizado com sucesso!');
-      // Aqui você pode redirecionar o usuário ou limpar o formulário
+      // redirecionar o usuário para a tela de login
+      window.location.href = 'login.html';
     })
     .catch((error) => {
       console.error('Error:', error);
