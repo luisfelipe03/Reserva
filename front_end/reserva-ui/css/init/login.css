@@ -16,8 +16,12 @@ body {
     color: #ffffff !important;
 }
 footer {
-    background-color: #f8f9fa;
-    color: #6c757d;
+    background-color: rgba(0, 0, 0, 0.05);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
 }
 .form-control:focus {
     border-color: #007bff;
