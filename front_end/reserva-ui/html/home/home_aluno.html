@@ -6,6 +6,25 @@
     <title>Reserva</title>
 </head>
 <body>
-    Home ALUNO
+    Home ALUNO,
+    <p id="nomeDoAluno"></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Recupera os dados do usuário do localStorage
+            const userData = JSON.parse(localStorage.getItem('userData'));
+
+            // Verifica se o usuário está autenticado (dados do usuário presentes no localStorage)
+            if (userData) {
+                // Adicione aqui o código para personalizar a página home_aluno com os dados do usuário
+                // Por exemplo, você pode exibir o nome do aluno em algum lugar na página
+                const nomeElement = document.getElementById('nomeDoAluno');
+                nomeElement.textContent = `Bem-vindo, ${userData.nome}!`;
+            } else {
+                // Redireciona o usuário para a página de login se não estiver autenticado
+                window.location.href = '/caminho/para/login.html';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -4,34 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/login.css">
     <title>Reserva</title>
-    <style>
-        body {
-            background-color: #f0f2f5;
-        }
-        .btn-custom {
-            background-color: #007bff;
-            color: #ffffff;
-        }
-        .btn-custom:hover {
-            background-color: #0056b3;
-            color: #ffffff;
-        }
-        .navbar-custom {
-            background-color: #007bff;
-        }
-        .navbar-brand {
-            color: #ffffff !important;
-        }
-        footer {
-            background-color: #f8f9fa;
-            color: #6c757d;
-        }
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 123, 255, 0.6);
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar navbar-light navbar-custom" style="background-color: #007bff;">
@@ -87,6 +61,8 @@
         .then(response => response.json())
         .then(data => {
           console.log('Success:', data);
+          // Salva os dados do usuário no localStorage
+          localStorage.setItem('userData', JSON.stringify(data));
           // Trata a resposta com base no cargo do usuário
           if (data.cargo === 'PROFESSOR') {
             alert(`Bem-vindo, Professor ${data.nome}!`);
