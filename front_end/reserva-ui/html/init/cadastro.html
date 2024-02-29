@@ -14,7 +14,6 @@
     </div>
 </nav>
 
-
 <div class="container vh-100 d-flex justify-content-center align-items-center">
     <div class="w-100" style="max-width: 800px;">
         <form id="signupForm" class="row g-3">
@@ -71,6 +70,23 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  const cpfInput = document.getElementById('cpf');
+
+  cpfInput.addEventListener('input', function (e) {
+    let cpf = e.target.value;
+
+    // Remove caracteres não numéricos
+    cpf = cpf.replace(/\D/g, '');
+
+    // Adiciona os pontos e hífen
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    // Atualiza o valor do input com o CPF formatado
+    e.target.value = cpf;
+  });
+  
   const form = document.getElementById('signupForm');
 
   form.addEventListener('submit', function (e) {
@@ -118,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHj6SAw2dZv2jjKWLbWmwMlfC8Pb6KUxRdjI/nu1Hl5ZTpaf3izz0jD" crossorigin="anonymous"></script>
 </body>
 </html>
