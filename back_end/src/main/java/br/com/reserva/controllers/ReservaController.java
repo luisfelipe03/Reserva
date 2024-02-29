@@ -15,6 +15,7 @@ import br.com.reserva.facade.Facade;
 
 @RestController
 @RequestMapping("/api/reserva")
+@CrossOrigin(origins = "*")
 public class ReservaController {
 	
 	@Autowired

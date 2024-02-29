@@ -19,6 +19,7 @@ import br.com.reserva.facade.Facade;
 
 @RestController
 @RequestMapping("api/adm")
+@CrossOrigin(origins = "*")
 public class AdministradorController {
 	
 	@Autowired

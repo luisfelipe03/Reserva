@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.reserva.facade.Facade;
 import br.com.reserva.mapper.ModelMapper;
@@ -24,6 +21,7 @@ import br.com.reserva.utils.Cargos;
 
 @RestController
 @RequestMapping("api/login")
+@CrossOrigin(origins = "*")
 public class AuthController {
 	
 	@Autowired
@@ -53,13 +51,13 @@ public class AuthController {
 				var admResponse = ModelMapper.parseObject(adm, Administrador.class);
 				return ResponseEntity.status(HttpStatus.OK).body(admResponse);
 			}
-			if(usrLogado.getCargo() == Cargos.PROFESSOR) {
+			else if(usrLogado.getCargo() == Cargos.PROFESSOR) {
 				var prof = facade.getByIdProfessor(usrLogado.getId());
 				var profResponse = ModelMapper.parseObject(prof, Professor.class);
 				return ResponseEntity.status(HttpStatus.OK).body(profResponse);
 			}
-			if(usrLogado.getCargo() == Cargos.ALUNO) {
-				var aluno = facade.getByIdAdm(usrLogado.getId());
+			else if(usrLogado.getCargo() == Cargos.ALUNO) {
+				var aluno = facade.getByIdAluno(usrLogado.getId());
 				var alunoResponse = ModelMapper.parseObject(aluno, Aluno.class);
 				return ResponseEntity.status(HttpStatus.OK).body(alunoResponse);
 			}
