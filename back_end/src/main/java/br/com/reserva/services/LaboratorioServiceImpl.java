@@ -3,6 +3,7 @@ package br.com.reserva.services;
 import java.util.List;
 import java.util.logging.Logger;
 
+import br.com.reserva.utils.StatusFuncionamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,4 +73,7 @@ public class LaboratorioServiceImpl implements LaboratorioService {
 			
 			repository.delete(entity);
 		}
+
+
+
 }

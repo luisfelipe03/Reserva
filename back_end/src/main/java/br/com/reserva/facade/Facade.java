@@ -3,8 +3,10 @@ package br.com.reserva.facade;
 import br.com.reserva.data.vo.*;
 import br.com.reserva.excepions.RequiredObjectIsNullException;
 import br.com.reserva.mapper.ModelMapper;
+import br.com.reserva.models.Laboratorio;
 import br.com.reserva.models.Reserva;
 import br.com.reserva.services.*;
+import br.com.reserva.utils.StatusFuncionamento;
 import br.com.reserva.utils.StatusReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -162,6 +164,12 @@ public class Facade {
 	
 	public void deleteLab(Long id) {
 		laboratorioService.delete(id);
+	}
+
+	public LaboratorioVO updateStatusLab(long id, StatusFuncionamento status) {
+		var lab = laboratorioService.findById(id);
+		lab.setStatusFuncionamento(status);
+		return laboratorioService.update(lab);
 	}
 	
 	//Reserva------------------------------------------------------------------------------------------------

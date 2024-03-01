@@ -1,5 +1,5 @@
 package br.com.reserva.utils;
 
 public enum StatusFuncionamento {
-	DISPONIVEL, EM_MANUTENCAO
+	DISPONIVEL, EM_MANUTENCAO, DESATIVADO;
 }
