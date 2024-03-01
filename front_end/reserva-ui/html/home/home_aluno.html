@@ -31,6 +31,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Recupera os dados do usuário do localStorage
             const userData = JSON.parse(localStorage.getItem('userData'));
+            const senha = localStorage.getItem('senha');
+            localStorage.setItem('senha', senha);
 
             // Verifica se o usuário está autenticado (dados do usuário presentes no localStorage)
             if (userData) {

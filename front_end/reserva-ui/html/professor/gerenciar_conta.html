@@ -8,24 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Reserva</title>
     <style>
-        .navbar-custom {
-            background-color: #007bff;
-        }
-        .navbar-brand {
-            color: #ffffff !important;
-        }
-        .btn-logout {
-            background: none;
-            border: none;
-            color: white;
-        }
         .footer-reserva {
             background-color: rgba(0, 0, 0, 0.05);
-            position: fixed;
+            position: absolute;
             bottom: 0;
             width: 100%;
             text-align: center;
             padding: 10px 0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
         }
     </style>
 </head>
@@ -44,7 +37,7 @@
         <div id="infoProfessor" class="card">
         </div>
         <div class="mt-3">
-            <button class="btn btn-primary" onclick="window.location.href='atualizar_cadastro.html'">Atualizar Cadastro</button>
+            <button class="btn btn-primary" onclick="window.location.href='editar_conta.html'">Atualizar Cadastro</button>
             <button class="btn btn-secondary" onclick="window.location.href='gerenciar_turma.html'">Gerenciar Turmas</button>
             <button class="btn btn-danger" onclick="excluirContaProfessor()">Deletar Conta</button>
         </div>
