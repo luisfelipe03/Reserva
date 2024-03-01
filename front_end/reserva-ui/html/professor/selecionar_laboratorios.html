@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Laboratórios Disponíveis</h2>
+        <form id="laboratoriosForm">
+            <div id="listaLaboratorios" class="my-3">
+                <!-- Lista de laboratórios será carregada aqui -->
+            </div>
+            <button type="submit" class="btn btn-primary">Continuar para Definir Horários</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('http://localhost:8080/api/laboratorio')
+            .then(response => response.json())
+            .then(laboratorios => {
+                const listaLaboratorios = document.getElementById('listaLaboratorios');
+                laboratorios.forEach(lab => {
+                    if(lab.acesso.includes("PROFESSOR")) {
+                        const labItem = document.createElement('div');
+                        labItem.classList.add('form-check');
+
+                        labItem.innerHTML = `
+                            <input class="form-check-input" type="checkbox" value="${lab.id}" id="lab${lab.id}">
+                            <label class="form-check-label" for="lab${lab.id}">
+                                ${lab.numLaboratorio} - Capacidade: ${lab.capacidade} - ${lab.descricao}
+                            </label>
+                        `;
+
+                        listaLaboratorios.appendChild(labItem);
+                    }
+                });
+            })
+            .catch(error => console.error('Erro ao buscar laboratórios:', error));
+        });
+
+        document.getElementById('laboratoriosForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const selecionados = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                selecionados.push(checkbox.value);
+            });
+            
+            localStorage.setItem('laboratoriosSelecionados', JSON.stringify(selecionados));
+            
+            // Redireciona para a próxima página de definição de horários
+            window.location.href = 'definir_horarios.html';
+        });
+    </script>
+</body>
+</html>

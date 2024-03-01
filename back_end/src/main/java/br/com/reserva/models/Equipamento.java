@@ -24,7 +24,7 @@ public class Equipamento {
 	private String nome;
 	@Column(nullable = false)
 	private String numPatrimonio;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@Enumerated(EnumType.STRING)
 	private List<Cargos> acesso;
 	@Column(nullable = false)
