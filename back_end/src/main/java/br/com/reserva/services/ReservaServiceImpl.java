@@ -9,6 +9,7 @@ import br.com.reserva.models.Equipamento;
 import br.com.reserva.models.Laboratorio;
 import br.com.reserva.models.Usuario;
 import br.com.reserva.utils.StatusFuncionamento;
+import br.com.reserva.utils.StatusReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -117,6 +118,10 @@ public class ReservaServiceImpl implements ReservaService {
 
 	public boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio) {
 		return laboratorio != null && laboratorio.getAcesso().contains(usuario.getCargo()) && laboratorio.getStatusFuncionamento() != StatusFuncionamento.EM_MANUTENCAO;
+	}
+
+	public List<ReservaVO> findAllReservaByStatus(StatusReserva status) {
+		return ModelMapper.parseListObjects(repository.getReservaByStatusReserva(status), ReservaVO.class);
 	}
 
 }

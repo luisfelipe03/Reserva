@@ -2,6 +2,7 @@ package br.com.reserva.controllers;
 
 import java.util.List;
 
+import br.com.reserva.utils.StatusReserva;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -81,4 +82,9 @@ public class ReservaController {
 		facade.deleteReserva(id);
 	}
 
+	@GetMapping("/status")
+	public List<ReservaVO> getReservasByStatus(@RequestParam(value = "status", required = false) String statusUrl) {
+		StatusReserva status = StatusReserva.valueOf(statusUrl.toUpperCase());
+		return facade.getReservasByStatus(status);
+	}
 }

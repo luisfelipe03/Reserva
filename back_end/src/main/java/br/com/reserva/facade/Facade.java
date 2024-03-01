@@ -238,6 +238,8 @@ public class Facade {
 		reservaService.delete(id);
 	}
 
-
+	public List<ReservaVO> getReservasByStatus(StatusReserva status) {
+		return reservaService.findAllReservaByStatus(status);
+	}
 
 }

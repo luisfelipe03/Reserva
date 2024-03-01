@@ -5,6 +5,7 @@ import br.com.reserva.models.Equipamento;
 import br.com.reserva.models.Laboratorio;
 import br.com.reserva.models.Reserva;
 import br.com.reserva.models.Usuario;
+import br.com.reserva.utils.StatusReserva;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,4 +24,5 @@ public interface ReservaService {
     boolean verificaConflitoDevolucaoAntesEntrega(LocalDateTime entrega, LocalDateTime devolucao);
     boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos);
     boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio);
+    List<ReservaVO> findAllReservaByStatus(StatusReserva status);
 }
