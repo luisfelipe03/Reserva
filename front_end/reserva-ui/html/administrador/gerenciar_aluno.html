@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/home/gerenciar_usuario.css">
-    <title>Reserva</title>
+    <title>Gerenciamento de Alunos</title>
+    <style>
+        .footer-reserva {
+            background-color: rgba(0, 0, 0, 0.05);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +28,11 @@
         </div>
     </nav>
 
-    
+    <div class="container mt-4">
+        <h2>Gerenciamento de Alunos</h2>
+        <button class="btn btn-dark" onclick="window.location.href='cadastrar_aluno.html'">Alunos bloqueados</button>
+        <div id="lista-alunos"></div>
+    </div>
 
     <footer class="footer-reserva">
         © 2024 Reserva
@@ -23,20 +40,66 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Recupera os dados do usuário do localStorage
-            const userData = JSON.parse(localStorage.getItem('userData'));
-
-            // Verifica se o usuário está autenticado (dados do usuário presentes no localStorage)
-            if (userData) {
-                // Adicione aqui o código para personalizar a página home_aluno com os dados do usuário
-                // Constantes com os dados do usuário
-                const nomeElement = document.getElementById('nomeDoAdm');
-                nomeElement.textContent = `Bem-vindo, ${userData.nome}!`;
-            } else {
-                // Redireciona o usuário para a página de login se não estiver autenticado
-                window.location.href = '/html/init/login.html';
-            }
+            fetch('http://localhost:8080/api/aluno', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(alunos => {
+                const listaAlunos = document.getElementById('lista-alunos');
+                alunos.forEach(aluno => {
+                    if (aluno.cargo != 'BLOQUEADO') {
+                        const alunoDiv = document.createElement('div');
+                        alunoDiv.classList.add('card', 'my-3');
+                        alunoDiv.innerHTML = `
+                        <div class="card-body">
+                            <h5 class="card-title">${aluno.nome}</h5>
+                            <p class="card-text">CPF: ${aluno.cpf} - ${aluno.email}</p>
+                            <p class="card-text">Curso: ${aluno.curso.nome}</p>
+                            <div class="action-buttons">
+                                <button class="btn btn-danger" onclick="excluirAluno(${aluno.id})">Excluir</button>
+                                <button class="btn btn-warning" onclick="bloquearAcessoAluno(${aluno.id})">Bloquear Acesso</button>
+                            </div>
+                        </div>
+                    `;
+                    listaAlunos.appendChild(alunoDiv);
+                    }
+                });
+            })
+            .catch(error => console.error('Falha ao recuperar os alunos:', error));
         });
+
+        function excluirAluno(idAluno) {
+            if (confirm('Tem certeza que deseja excluir este aluno?')) {
+                fetch(`http://localhost:8080/api/aluno/${idAluno}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Aluno excluído com sucesso!');
+                        location.reload(); // Recarrega a página para atualizar a lista
+                    } else {
+                        alert('Falha ao excluir o aluno.');
+                    }
+                })
+                .catch(error => console.error('Erro ao excluir o aluno:', error));
+            }
+        }
+
+        function bloquearAcessoAluno(idAluno) {
+            fetch(`http://localhost:8080/api/adm/aluno/bloquearAcesso/${idAluno}`, {
+                method: 'PATCH'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Acesso do aluno bloqueado com sucesso!');
+                    location.reload(); // Recarrega a página para atualizar a lista
+                } else {
+                    alert('Falha ao bloquear o acesso do aluno.');
+                }
+            })
+            .catch(error => console.error('Erro ao bloquear o acesso:', error));
+        }
     </script>
+
 </body>
 </html>
