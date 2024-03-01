@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import br.com.reserva.models.Equipamento;
 import br.com.reserva.models.Laboratorio;
 import br.com.reserva.models.Usuario;
+import br.com.reserva.utils.StatusFuncionamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,18 +71,16 @@ public class ReservaServiceImpl implements ReservaService {
 		repository.delete(entity);
 	}
 
-	public boolean conflitoReserva(Usuario responsavel, List<Reserva> reservas, List<Equipamento> equipamentosR, Laboratorio laboratorioR,
-								   LocalDateTime entregaR, LocalDateTime devolucaoR) {
+	public boolean conflitoReserva(Usuario responsavel, List<Reserva> reservas, List<Equipamento> equipamentosR, Laboratorio laboratorioR, LocalDateTime entregaR, LocalDateTime devolucaoR) {
 
-		if (verificaCargoEquipamento(responsavel, equipamentosR) || verificaCargoLaboratorio(responsavel, laboratorioR)) {
+		// Verifica permissões antes de processar as reservas
+		if (!verificaPermissoesParaReserva(responsavel, equipamentosR, laboratorioR)) {
 			throw new RuntimeException("Usuário sem permissão para reservar equipamento ou laboratório");
 		}
 
+		// Verifica conflitos de reservas
 		for (Reserva reserva : reservas) {
-			boolean conflitoEquipamento = equipamentosR != null && !Collections.disjoint(reserva.getEquipamentos(), equipamentosR);
-			boolean conflitoLab = laboratorioR != null && laboratorioR.equals(reserva.getLab());
-
-			if ((conflitoEquipamento || conflitoLab) && verificaConflitoDeDatas(reserva.getEntrega(), reserva.getDevolucao(), entregaR, devolucaoR)) {
+			if (verificaConflito(reserva, equipamentosR, laboratorioR, entregaR, devolucaoR)) {
 				return true; // Há um conflito
 			}
 		}
@@ -89,6 +88,16 @@ public class ReservaServiceImpl implements ReservaService {
 		return false; // Não há conflito
 	}
 
+	private boolean verificaPermissoesParaReserva(Usuario responsavel, List<Equipamento> equipamentos, Laboratorio laboratorio) {
+		return verificaCargoEquipamento(responsavel, equipamentos) && verificaCargoLaboratorio(responsavel, laboratorio);
+	}
+
+	private boolean verificaConflito(Reserva reserva, List<Equipamento> equipamentos, Laboratorio laboratorio, LocalDateTime entrega, LocalDateTime devolucao) {
+		boolean conflitoEquipamento = equipamentos != null && !Collections.disjoint(reserva.getEquipamentos(), equipamentos);
+		boolean conflitoLab = laboratorio != null && laboratorio.equals(reserva.getLab());
+
+		return (conflitoEquipamento || conflitoLab) && verificaConflitoDeDatas(reserva.getEntrega(), reserva.getDevolucao(), entrega, devolucao);
+	}
 
 	public boolean verificaConflitoDeDatas(LocalDateTime inicioReserva1, LocalDateTime fimReserva1,
 											LocalDateTime inicioReserva2, LocalDateTime fimReserva2) {
@@ -102,15 +111,12 @@ public class ReservaServiceImpl implements ReservaService {
 	}
 
 	public boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos) {
-		for (Equipamento equipamento : equipamentos) {
-			if (equipamento.getAcesso().contains(usuario.getCargo())) {
-				return true;
-			}
-		}
-		return false;
+		return equipamentos.stream()
+				.anyMatch(equipamento -> equipamento.getAcesso().contains(usuario.getCargo()) && equipamento.getStatusFuncionamento() != StatusFuncionamento.EM_MANUTENCAO);
 	}
 
 	public boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio) {
-		return laboratorio != null && laboratorio.getAcesso().contains(usuario.getCargo());
+		return laboratorio != null && laboratorio.getAcesso().contains(usuario.getCargo()) && laboratorio.getStatusFuncionamento() != StatusFuncionamento.EM_MANUTENCAO;
 	}
+
 }
