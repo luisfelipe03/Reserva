@@ -19,7 +19,7 @@ import br.com.reserva.facade.Facade;
 
 @RestController
 @RequestMapping("api/adm")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class AdministradorController {
 	
 	@Autowired
@@ -164,6 +164,7 @@ public class AdministradorController {
 			}
 	)
 	@ResponseStatus(code = HttpStatus.OK)
+	@CrossOrigin(origins = "*")
 	public AlunoVO liberarAcesso(@PathVariable(value = "idAluno") long idAluno) {
 		return facade.liberarAluno(idAluno);
 	}
