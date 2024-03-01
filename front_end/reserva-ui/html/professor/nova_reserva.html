@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Reserva</title>
+    <style>
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .navbar-brand {
+            color: #ffffff !important;
+        }
+        .btn-logout {
+            background: none;
+            border: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-light bg-primary">
+        <div class="container-fluid">
+          <a href="/html/professor/reserva.html" class="navbar-brand text-white">
+            <i class="fas fa-arrow-left"></i> 
+          </a>
+            <span class="navbar-brand mb-0 h1 text-white" style="flex-grow: 1; text-align: center;">Reserva</span>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h2>Equipamentos Disponíveis para Professores</h2>
+        <form id="equipamentosForm">
+            <div id="listaEquipamentos" class="my-3">
+                <!-- Lista de equipamentos será carregada aqui -->
+            </div>
+            <button type="submit" class="btn btn-primary">Continuar para Seleção de Laboratórios</button>
+        </form>
+    </div>
+
+    <footer class="footer-reserva text-center">
+        © 2024 Reserva
+    </footer>
+
+    <script>
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const idLogado = userData.id;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('http://localhost:8080/api/equipamento')
+            .then(response => response.json())
+            .then(equipamentos => {
+                const listaEquipamentos = document.getElementById('listaEquipamentos');
+                equipamentos.forEach(equip => {
+                    if(equip.acesso.includes("PROFESSOR")) {
+                        const equipItem = document.createElement('div');
+                        equipItem.classList.add('form-check');
+
+                        equipItem.innerHTML = `
+                            <input class="form-check-input" type="checkbox" value="${equip.id}" id="equip${equip.id}">
+                            <label class="form-check-label" for="equip${equip.id}">
+                                ${equip.nome} - Patrimônio: ${equip.numPatrimonio}
+                            </label>
+                        `;
+
+                        listaEquipamentos.appendChild(equipItem);
+                    }
+                });
+            })
+            .catch(error => console.error('Erro ao buscar equipamentos:', error));
+        });
+
+        document.getElementById('equipamentosForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const selecionados = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                selecionados.push(checkbox.value);
+            });
+            
+            localStorage.setItem('equipamentosSelecionados', JSON.stringify(selecionados));
+            
+            // Redireciona para a próxima página
+            window.location.href = 'selecionar_laboratorios.html';
+        });
+    </script>
+</body>
+</html>
