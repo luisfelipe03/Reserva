@@ -126,7 +126,6 @@ public class LaboratorioController {
 	)
 	@ResponseStatus(code = HttpStatus.OK)
 	public LaboratorioVO updateStatusLab(@PathVariable(value = "id") Long id, @PathVariable(value = "status") String status) {
-		System.out.println(status);
 		StatusFuncionamento statusFuncionamento = StatusFuncionamento.valueOf(status);
 		return facade.updateStatusLab(id, statusFuncionamento);
 	}

@@ -141,6 +141,11 @@ public class Facade {
 	public void deleteEquip(Long id) {
 		equipamentoService.delete(id);
 	}
+	public EquipamentoVO updateStatusEquip(long id, StatusFuncionamento statusFuncionamento) {
+		var equip = equipamentoService.findById(id);
+		equip.setStatusFuncionamento(statusFuncionamento);
+		return equipamentoService.update(equip);
+	}
 	
 	//Laboratorio------------------------------------------------------------------------------------------------
 	@Autowired
@@ -232,6 +237,7 @@ public class Facade {
 	public void deleteReserva(Long id) {
 		reservaService.delete(id);
 	}
+
 
 
 }

@@ -2,6 +2,7 @@ package br.com.reserva.controllers;
 
 import java.util.List;
 
+import br.com.reserva.utils.StatusFuncionamento;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -122,4 +123,24 @@ public class EquipamentoController {
 		facade.deleteEquip(id);
 	}
 
+	@PatchMapping(value = "/{id}/{status}", produces={"application/json"})
+	@Operation(summary = "Atualiza o status de um equipamento", description = "Atualiza o status de um equipamento cadastrado no banco de dados",
+			tags = {"Equipamentos"},
+			responses = {
+					@ApiResponse(description = "Success", responseCode = "200",
+							content = @Content(
+									mediaType = "application/json",
+									schema = @Schema(implementation = EquipamentoVO.class)
+							)),
+					@ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+					@ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			}
+	)
+	@ResponseStatus(code = HttpStatus.OK)
+	public EquipamentoVO updateStatusEquip(@PathVariable(value = "id") long id, @PathVariable(value = "status") String status) {
+		StatusFuncionamento statusFuncionamento = StatusFuncionamento.valueOf(status);
+		return facade.updateStatusEquip(id, statusFuncionamento);
+	}
 }
