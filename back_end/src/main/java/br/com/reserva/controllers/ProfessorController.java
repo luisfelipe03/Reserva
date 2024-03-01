@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import br.com.reserva.facade.Facade;
 @RestController
 @RequestMapping("/api/professor")
 @CrossOrigin(origins = "*")
+@Tag(name = "Professor", description = "Endpoints para gerenciamento dos professores da UFAPE.")
 public class ProfessorController {
 	
 	@Autowired
@@ -77,6 +79,24 @@ public class ProfessorController {
 		return facade.getTurmas(id);
 	}
 
+	@GetMapping(value = "/turma/{idTurma}", produces={"application/json"})
+	@Operation(summary = "Busca uma turma por ID", description = "Busca uma turma específica cadastrada no banco de dados pelo seu ID",
+			tags = {"Turmas"},
+			responses = {
+					@ApiResponse(description = "Success", responseCode = "200",
+							content = @Content(
+									mediaType = "application/json",
+									schema = @Schema(implementation = TurmaVO.class)
+							)),
+					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			}
+	)
+	@ResponseStatus(code = HttpStatus.OK)
+	public TurmaVO getTurma(@PathVariable(value = "idTurma") Long idTurma) {
+		return facade.getTurmaById(idTurma);
+	}
+
 	@PostMapping(produces={"application/json"}, consumes={"application/json"})
 	@Operation(summary = "Cria um novo professor", description = "Cadastra um novo professor no banco de dados",
 			tags = {"Professores"},
@@ -130,7 +150,7 @@ public class ProfessorController {
 		return facade.updateProfessor(professor);
 	}
 
-	@PatchMapping(produces={"application/json"}, consumes={"application/json"})
+	@PutMapping(value = "/{idProfessor}/turma", produces={"application/json"}, consumes={"application/json"})
 	@Operation(summary = "Atualiza turma de um professor", description = "Atualiza informações de uma turma associada a um professor",
 			tags = {"Professores", "Turmas"},
 			responses = {
@@ -141,8 +161,9 @@ public class ProfessorController {
 			}
 	)
 	@ResponseStatus(code = HttpStatus.OK)
-	public void updateTurma(@RequestBody ProfessorVO professor) {
-		facade.updateTurma(professor);
+	public TurmaVO updateTurma(@PathVariable(value = "idProfessor") Long idProf, @RequestBody TurmaVO turma) {
+		var profVO = facade.getByIdProfessor(idProf);
+		return facade.updateTurma(profVO,turma);
 	}
 
 	@DeleteMapping(value = "/{id}")

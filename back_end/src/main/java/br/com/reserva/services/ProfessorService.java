@@ -16,4 +16,6 @@ public interface ProfessorService {
     List<TurmaVO> findTurmasByProfessorId(Long id);
     ProfessorVO updateTurma(ProfessorVO professor);
     void deleteTurma(Long idTurma, Long idProf);
+    TurmaVO findTurmaById(Long id);
+    TurmaVO updateTurma(ProfessorVO professor, TurmaVO turma);
 }

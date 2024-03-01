@@ -64,8 +64,8 @@ public class Facade {
 		return professorService.findById(id);
 	}
 	
-	public void updateTurma(ProfessorVO professorVO) {
-		professorService.updateTurma(professorVO);
+	public TurmaVO updateTurma(ProfessorVO professor,TurmaVO turma) {
+		return professorService.updateTurma(professor, turma);
 	}
 
 	public ProfessorVO updateProfessor(ProfessorVO professorAtualizado) {
@@ -81,6 +81,10 @@ public class Facade {
 
 	public List<TurmaVO> getTurmas(Long id) {
 		return professorService.findTurmasByProfessorId(id);
+	}
+
+	public TurmaVO getTurmaById(Long id) {
+		return professorService.findTurmaById(id);
 	}
 	//Administrador----------------------------------------------------------------------------------------
 	@Autowired

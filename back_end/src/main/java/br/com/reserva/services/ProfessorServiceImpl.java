@@ -149,4 +149,32 @@ public class ProfessorServiceImpl implements ProfessorService {
 		turmaRepository.delete(entity);
 	}
 
+	@Override
+	public TurmaVO findTurmaById(Long id) {
+		return turmaRepository.findById(id).map(turma -> ModelMapper.parseObject(turma, TurmaVO.class))
+				.orElseThrow(() -> new ResourceNotFoundException("Não existe turma cadastrada com id: " + id));
+	}
+
+	@Override
+	public TurmaVO updateTurma(ProfessorVO professor,TurmaVO turma) {
+		Turma entity = turmaRepository.findById(turma.getId()).orElseThrow(
+				() -> new ResourceNotFoundException("Não existe turma cadastrada com id:" + turma.getId()));
+		Professor professorEntity = repository.findById(professor.getId()).orElseThrow(
+				() -> new ResourceNotFoundException("Não existe professor cadastrado com id:" + professor.getId()));
+		if(!professorEntity.getTurmas().contains(entity)) {
+			throw new ResourceNotFoundException("Não existe turma cadastrada com id:" + turma.getId() + " para o professor com id:" + professor.getId());
+		}
+
+		TurmaVO turmaAtualizada = null;
+		for(Turma t : professorEntity.getTurmas()) {
+			if(t.getId() == turma.getId()) {
+				t.setDisciplina(turma.getDisciplina());
+				t.setCurso(turma.getCurso());
+				turmaRepository.save(t);
+				turmaAtualizada = ModelMapper.parseObject(t, TurmaVO.class);
+			}
+		}
+		return turmaAtualizada;
+	}
+
 }

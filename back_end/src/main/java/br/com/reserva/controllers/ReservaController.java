@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import br.com.reserva.facade.Facade;
 @RestController
 @RequestMapping("/api/reserva")
 @CrossOrigin(origins = "*")
+@Tag(name = "Reserva", description = "Endpoints para gerenciamento das reserva da UFAPE.")
 public class ReservaController {
 	
 	@Autowired
