@@ -67,22 +67,18 @@ public class ReservaController {
 		return facade.updateReserva(reserva);
 	}
 
-	@DeleteMapping("/{id}")
-	@Operation(summary = "Deleta uma reserva específica", description = "Deleta a reserva com base no ID fornecido",
+	@GetMapping("/status")
+	@Operation(summary = "Obtém reservas por status", description = "Retorna uma lista de reservas com base no status fornecido",
 			responses = {
-					@ApiResponse(responseCode = "204", description = "Reserva deletada com sucesso",
-							content = @Content),
-					@ApiResponse(responseCode = "404", description = "Reserva não encontrada",
+					@ApiResponse(responseCode = "200", description = "Operação bem-sucedida",
+							content = @Content(mediaType = "application/json",
+									schema = @Schema(implementation = ReservaVO.class))),
+					@ApiResponse(responseCode = "400", description = "Status de reserva inválido",
 							content = @Content),
 					@ApiResponse(responseCode = "500", description = "Erro interno no servidor",
 							content = @Content)
 			})
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteReserva(@PathVariable("id") Long id) {
-		facade.deleteReserva(id);
-	}
-
-	@GetMapping("/status")
+	@ResponseStatus(code = HttpStatus.OK)
 	public List<ReservaVO> getReservasByStatus(@RequestParam(value = "status", required = false) String statusUrl) {
 		StatusReserva status = StatusReserva.valueOf(statusUrl.toUpperCase());
 		return facade.getReservasByStatus(status);

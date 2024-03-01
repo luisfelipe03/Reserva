@@ -15,11 +15,22 @@ body {
 .navbar-brand {
     color: #ffffff !important;
 }
-footer {
-    background-color: #f8f9fa;
-    color: #6c757d;
+.footer-reserva {
+    background-color: rgba(0, 0, 0, 0.05);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
 }
 .form-control:focus {
     border-color: #007bff;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 123, 255, 0.6);
+}
+.btn-reserva {
+    background-color: #28a745;
+    color: white;
+    font-size: large;
+    padding: 20px;
+    border: none;
 }

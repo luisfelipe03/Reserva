@@ -16,7 +16,6 @@ public interface ReservaService {
     ReservaVO findById(Long id);
     ReservaVO create(ReservaVO reservaVO);
     ReservaVO update(ReservaVO reserva);
-    void delete(Long id);
     boolean conflitoReserva(Usuario responsavel, List<Reserva> reservas, List<Equipamento> equipamentosR, Laboratorio laboratorioR,
                             LocalDateTime entregaR, LocalDateTime devolucaoR);
     boolean verificaConflitoDeDatas(LocalDateTime inicioReserva1, LocalDateTime fimReserva1,

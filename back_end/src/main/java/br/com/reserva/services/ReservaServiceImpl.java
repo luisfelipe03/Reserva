@@ -63,15 +63,6 @@ public class ReservaServiceImpl implements ReservaService {
 		return ModelMapper.parseObject(repository.save(entity), ReservaVO.class);
 	}
 
-	public void delete(Long id) {
-		logger.info("Deletando reserva pelo id");
-
-		var entity = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Não existe reserva cadastrado com id: " + id));
-
-		repository.delete(entity);
-	}
-
 	public boolean conflitoReserva(Usuario responsavel, List<Reserva> reservas, List<Equipamento> equipamentosR, Laboratorio laboratorioR, LocalDateTime entregaR, LocalDateTime devolucaoR) {
 
 		// Verifica permissões antes de processar as reservas

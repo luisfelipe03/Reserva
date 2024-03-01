@@ -233,10 +233,6 @@ public class Facade {
 		var vo = ModelMapper.parseObject(reserva, ReservaVO.class);
 		return reservaService.update(vo);
 	}
-	
-	public void deleteReserva(Long id) {
-		reservaService.delete(id);
-	}
 
 	public List<ReservaVO> getReservasByStatus(StatusReserva status) {
 		return reservaService.findAllReservaByStatus(status);
