@@ -83,8 +83,8 @@ public class Facade {
 		return professorService.findTurmasByProfessorId(id);
 	}
 
-	public TurmaVO getTurmaById(Long id) {
-		return professorService.findTurmaById(id);
+	public TurmaVO getTurmaById(Long idTurma, ProfessorVO professor) {
+		return professorService.findTurmaById(idTurma, professor);
 	}
 	//Administrador----------------------------------------------------------------------------------------
 	@Autowired

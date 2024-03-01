@@ -11,7 +11,7 @@
         .footer-reserva {
             background-color: rgba(0, 0, 0, 0.05);
             position: absolute;
-            bottom: auto;
+            bottom: 0;
             width: 100%;
             text-align: center;
             padding: 10px 0;
@@ -61,7 +61,7 @@
                     <div class="card-body">
                         <h5 class="card-title">${turma.disciplina}</h5>
                         <p class="card-text">Curso: ${turma.curso.nome}</p>
-                        <button class="btn btn-primary" onclick="">Editar</button>
+                        <button class="btn btn-primary" onclick="editarTurma(${turma.id})">Editar</button>
                         <button class="btn btn-danger" onclick="excluirTurma(${turma.id})">Excluir</button>
                     </div>
                 `;
@@ -69,6 +69,14 @@
             });
         })
         .catch(error => console.error('Erro ao buscar turmas:', error));
+    }
+
+    function editarTurma(idTurma) {
+        // Armazena o ID da turma no localStorage
+        localStorage.setItem('idTurma', idTurma);
+        
+        // Redireciona para a página de edição de turma
+        window.location.href = `/html/professor/editar_turma.html`;
     }
     
     function excluirTurma(idTurma) {

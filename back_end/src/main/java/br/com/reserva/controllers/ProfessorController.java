@@ -79,22 +79,10 @@ public class ProfessorController {
 		return facade.getTurmas(id);
 	}
 
-	@GetMapping(value = "/turma/{idTurma}", produces={"application/json"})
-	@Operation(summary = "Busca uma turma por ID", description = "Busca uma turma específica cadastrada no banco de dados pelo seu ID",
-			tags = {"Turmas"},
-			responses = {
-					@ApiResponse(description = "Success", responseCode = "200",
-							content = @Content(
-									mediaType = "application/json",
-									schema = @Schema(implementation = TurmaVO.class)
-							)),
-					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
-			}
-	)
-	@ResponseStatus(code = HttpStatus.OK)
-	public TurmaVO getTurma(@PathVariable(value = "idTurma") Long idTurma) {
-		return facade.getTurmaById(idTurma);
+	@GetMapping(value = "/{idProfessor}/turma/{idTurma}", produces={"application/json"})
+	public TurmaVO getTurma(@PathVariable(value = "idProfessor") Long idProfessor, @PathVariable(value = "idTurma") Long idTurma) {
+		ProfessorVO profVO = facade.getByIdProfessor(idProfessor);
+		return facade.getTurmaById(idTurma, profVO);
 	}
 
 	@PostMapping(produces={"application/json"}, consumes={"application/json"})
@@ -131,7 +119,7 @@ public class ProfessorController {
 		return facade.getByIdProfessor(id);
 	}
 
-	@PutMapping(produces={"application/json"}, consumes={"application/json"})
+	@PatchMapping(produces={"application/json"}, consumes={"application/json"})
 	@Operation(summary = "Atualiza um professor", description = "Atualiza os dados de um professor cadastrado no banco de dados",
 			tags = {"Professores"},
 			responses = {
