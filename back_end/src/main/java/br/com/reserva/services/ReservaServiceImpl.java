@@ -115,4 +115,8 @@ public class ReservaServiceImpl implements ReservaService {
 		return ModelMapper.parseListObjects(repository.getReservaByStatusReserva(status), ReservaVO.class);
 	}
 
+	public List<ReservaVO> findAllReservaByIdResponsavel(long id) {
+		return ModelMapper.parseListObjects(repository.getReservaByIdResponsavel(id), ReservaVO.class);
+	}
+
 }

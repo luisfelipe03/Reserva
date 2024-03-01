@@ -37,6 +37,23 @@ public class ReservaController {
 		return facade.getAllReservas();
 	}
 
+	@GetMapping(value = "/responsavel/{id}", produces = "application/json")
+	@Operation(summary = "Obtém reservas por responsável", description = "Retorna uma lista de reservas com base no ID do responsável fornecido",
+			responses = {
+					@ApiResponse(responseCode = "200", description = "Operação bem-sucedida",
+							content = @Content(mediaType = "application/json",
+									schema = @Schema(implementation = ReservaVO.class))),
+					@ApiResponse(responseCode = "400", description = "ID de responsável inválido",
+							content = @Content),
+					@ApiResponse(responseCode = "500", description = "Erro interno no servidor",
+							content = @Content)
+			})
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<ReservaVO> getReservasByIdResponsavel(@PathVariable(value = "id") Long id) {
+		return facade.getReservasByIdResponsavel(id);
+	}
+
+
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@Operation(summary = "Cria uma nova reserva", description = "Cria uma nova reserva com os dados fornecidos",
 			responses = {

@@ -24,4 +24,5 @@ public interface ReservaService {
     boolean verificaCargoEquipamento(Usuario usuario, List<Equipamento> equipamentos);
     boolean verificaCargoLaboratorio(Usuario usuario, Laboratorio laboratorio);
     List<ReservaVO> findAllReservaByStatus(StatusReserva status);
+    List<ReservaVO> findAllReservaByIdResponsavel(long id);
 }

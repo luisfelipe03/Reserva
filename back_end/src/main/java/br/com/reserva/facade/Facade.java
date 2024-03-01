@@ -242,4 +242,8 @@ public class Facade {
 		return reservaService.findAllReservaByStatus(status);
 	}
 
+	public List<ReservaVO> getReservasByIdResponsavel(long id) {
+		return reservaService.findAllReservaByIdResponsavel(id);
+	}
+
 }
