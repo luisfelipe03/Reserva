@@ -33,6 +33,9 @@ Para executar este projeto, é necessário ter instalado em seu ambiente:
 
 O projeto utiliza HTML puro, sem a necessidade de um gerenciador de pacotes ou transpiladores. Para rodar o front-end localmente, você pode utilizar um servidor HTTP simples. Uma das formas mais fáceis de fazer isso é utilizando o Python ou o Node.js. 
 
+## End-Points
+Para ver todos os EndPoints basta acessar a url do Swagger: http://localhost:8080/swagger-ui/index.html
+
 
 ## Autores
 
