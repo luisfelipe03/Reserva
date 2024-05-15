@@ -53,12 +53,14 @@
             lista.innerHTML = '';
             data.forEach(equip => {
                 const item = document.createElement('div');
+                const acesso = equip.acesso.join(', ');
                 item.classList.add('card', 'mb-3');
                 item.innerHTML = `
                     <div class="card-body">
                         <h5 class="card-title">${equip.nome}</h5>
                         <p class="card-text">Patrimônio: ${equip.numPatrimonio}</p>
                         <p class="card-text">Descrição: ${equip.descricao}</p>
+                        <p class="card-text">Acesso: ${equip.acesso}</p>
                         <p class="card-text">Status: ${equip.statusFuncionamento}</p>
                         <button class="btn btn-warning" onclick="alterarStatusEquipamento(${equip.id})">Alterar Status</button>
                         <button class="btn btn-danger" onclick="excluirEquipamento(${equip.id})">Excluir</button>
